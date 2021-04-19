@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Company {
+public class Certificate {
     
     @Id
     @GeneratedValue
@@ -23,7 +23,7 @@ public class Company {
     private String name;
 
     @Builder
-    public Company(String name) {
+    public Certificate(String name) {
         this.name = name;
     }
 }
