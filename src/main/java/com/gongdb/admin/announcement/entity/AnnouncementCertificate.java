@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,10 +21,12 @@ public class AnnouncementCertificate {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "announcement_id")
     private Announcement announcement;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "certificate_id")
     private Certificate certificate;

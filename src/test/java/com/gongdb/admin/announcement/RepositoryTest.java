@@ -11,7 +11,6 @@ import com.gongdb.admin.announcement.entity.AnnouncementCertificate;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Position;
-import com.gongdb.admin.announcement.repository.CertificateRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ class RepositoryTests {
 
     @Autowired
     private TestEntityManager em;
-
-    @Autowired
-    private CertificateRepository certificateRepository;
 
 	@Test
     public void createAndFindCompany() {
@@ -93,7 +89,6 @@ class RepositoryTests {
 
         Announcement a = em.find(Announcement.class, announcement.getId());
 
-        assertEquals(certificateRepository.findAll().size(), certificates.size());
         assertEquals(company.getId(), a.getCompany().getId());
         assertEquals(position.getId(), a.getPosition().getId());
         assertEquals(
@@ -101,4 +96,5 @@ class RepositoryTests {
             a.getAnnouncementCertificates().stream().map(each -> each.getCertificate().getId()).collect(Collectors.toList())
         );
     }
+
 }

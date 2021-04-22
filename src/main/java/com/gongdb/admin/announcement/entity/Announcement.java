@@ -1,8 +1,8 @@
 package com.gongdb.admin.announcement.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,16 +26,18 @@ public class Announcement {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn
     private Company company;
 
+    @NotNull
     @ManyToOne
     @JoinColumn
     private Position position;
 
     @OneToMany(mappedBy = "announcement")
-    private List<AnnouncementCertificate> announcementCertificates;
+    private List<AnnouncementCertificate> announcementCertificates = new ArrayList<>();
 
     @NotNull
     private String recruitType;
@@ -53,6 +55,20 @@ public class Announcement {
     private Integer languagePerfectScore;
     private String rank;
     private Boolean isEither;
+
+    public void addCertificate(Certificate certificate) {
+        this.announcementCertificates.add(
+            AnnouncementCertificate
+            .builder()
+            .announcement(this)
+            .certificate(certificate)
+            .build()
+        );
+    }
+
+    public void addCertificates(List<Certificate> certificates) {
+        certificates.forEach(each -> addCertificate(each));
+    }
 
     @Builder
     public Announcement(
@@ -72,16 +88,7 @@ public class Announcement {
     ) {
         this.company = company;
         this.position = position;
-        this.announcementCertificates = certificates
-                                            .stream()
-                                            .map(
-                                                each -> AnnouncementCertificate
-                                                            .builder()
-                                                            .announcement(this)
-                                                            .certificate(each)
-                                                            .build()
-                                            )
-                                            .collect(Collectors.toList());
+        addCertificates(certificates);
         this.recruitType = recruitType;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;
