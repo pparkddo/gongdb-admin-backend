@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
+import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.entity.Position;
+import com.gongdb.admin.announcement.entity.Subject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,8 @@ class AnnouncementRepositoryTest {
     private Company company;
     private Position position;
     private List<Certificate> certificates;
+    private List<Department> departments;
+    private List<Subject> subjects;
     private Announcement announcement;
 
     @BeforeEach
@@ -33,13 +37,23 @@ class AnnouncementRepositoryTest {
         company = Company.builder().name("Test company").build();
         position = Position.builder().name("Test position").build();
         certificates = List.of(
-            Certificate.builder().name("certificateA").build(),
-            Certificate.builder().name("certificateB").build()
+            Certificate.builder().name("certificate1").build(),
+            Certificate.builder().name("certificate2").build()
+        );
+        departments = List.of(
+            Department.builder().name("department1").build(),
+            Department.builder().name("department2").build()
+        );
+        subjects = List.of(
+            Subject.builder().name("subject1").build(),
+            Subject.builder().name("subject2").build()
         );
         announcement = Announcement.builder()
                                    .company(company)
                                    .position(position)
                                    .certificates(certificates)
+                                   .departments(departments)
+                                   .subjects(subjects)
                                    .recruitType("recruitType")
                                    .recruitLevel("recruitLevel")
                                    .workingType("workingType")
@@ -56,6 +70,12 @@ class AnnouncementRepositoryTest {
         for (Certificate each : certificates) {
             em.persistAndFlush(each);
         }
+        for (Department each : departments) {
+            em.persistAndFlush(each);
+        }
+        for (Subject each : subjects) {
+            em.persistAndFlush(each);
+        }
         em.persistAndFlush(announcement);
         em.clear();
     }
@@ -67,6 +87,8 @@ class AnnouncementRepositoryTest {
         assertEquals(company.getName(), a.getCompany().getName());
         assertEquals(position.getName(), a.getPosition().getName());
         assertEquals(a.getAnnouncementCertificates().size(), certificates.size());
+        assertEquals(a.getAnnouncementDepartments().size(), departments.size());
+        assertEquals(a.getAnnouncementSubjects().size(), subjects.size());
         assertEquals(
             certificates.stream().map(each -> each.getId()).collect(Collectors.toList()),
             a.getAnnouncementCertificates().stream().map(each -> each.getCertificate().getId()).collect(Collectors.toList())

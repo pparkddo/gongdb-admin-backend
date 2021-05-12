@@ -40,6 +40,12 @@ public class Announcement {
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementCertificate> announcementCertificates = new ArrayList<>();
 
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AnnouncementDepartment> announcementDepartments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AnnouncementSubject> announcementSubjects = new ArrayList<>();
+
     @NotNull
     private String recruitType;
 
@@ -67,8 +73,36 @@ public class Announcement {
         );
     }
 
+    public void addDepartment(Department department) {
+        this.announcementDepartments.add(
+            AnnouncementDepartment 
+            .builder()
+            .announcement(this)
+            .department(department)
+            .build()
+        );
+    }
+
+    public void addSubject(Subject subject) {
+        this.announcementSubjects.add(
+            AnnouncementSubject
+            .builder()
+            .announcement(this)
+            .subject(subject)
+            .build()
+        );
+    }
+
     public void addCertificates(List<Certificate> certificates) {
         certificates.forEach(each -> addCertificate(each));
+    }
+
+    public void addDepartments(List<Department> departments) {
+        departments.forEach(each -> addDepartment(each));
+    }
+
+    public void addSubjects(List<Subject> subjects) {
+        subjects.forEach(each -> addSubject(each));
     }
 
     @Builder
@@ -76,6 +110,8 @@ public class Announcement {
         Company company,
         Position position,
         List<Certificate> certificates,
+        List<Department> departments,
+        List<Subject> subjects,
         String recruitType,
         String recruitLevel,
         String workingType,
@@ -90,6 +126,8 @@ public class Announcement {
         this.company = company;
         this.position = position;
         addCertificates(certificates);
+        addDepartments(departments);
+        addSubjects(subjects);
         this.recruitType = recruitType;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;
