@@ -47,6 +47,9 @@ public class Announcement {
     private List<AnnouncementSubject> announcementSubjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AnnouncementLanguage> announcementLanguages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementNote> announcementNotes = new ArrayList<>();
 
     @NotNull
@@ -67,7 +70,6 @@ public class Announcement {
     private LocalDate receiptTimestamp;
     private String sequence;
     private String link;
-    private Integer languageScore;
     private String rank;
 
     public void addCertificate(Certificate certificate) {
@@ -100,6 +102,16 @@ public class Announcement {
         );
     }
 
+    public void addLanguage(Language language) {
+        this.announcementLanguages.add(
+            AnnouncementLanguage
+            .builder()
+            .announcement(this)
+            .language(language)
+            .build()
+        );
+    }
+
     public void addNote(String note) {
         this.announcementNotes.add(
             AnnouncementNote
@@ -122,6 +134,10 @@ public class Announcement {
         subjects.forEach(each -> addSubject(each));
     }
 
+    public void addLanguages(List<Language> languages) {
+        languages.forEach(each -> addLanguage(each));
+    }
+
     public void addNotes(List<String> notes) {
         notes.forEach(each -> addNote(each));
     }
@@ -133,13 +149,13 @@ public class Announcement {
         List<Certificate> certificates,
         List<Department> departments,
         List<Subject> subjects,
+        List<Language> languages,
         String recruitType,
         String recruitLevel,
         String workingType,
         LocalDate receiptTimestamp,
         String sequence,
         String link,
-        Integer languageScore,
         String rank,
         String districtName,
         int headCount,
@@ -150,13 +166,13 @@ public class Announcement {
         addCertificates(certificates);
         addDepartments(departments);
         addSubjects(subjects);
+        addLanguages(languages);
         this.recruitType = recruitType;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;
         this.receiptTimestamp = receiptTimestamp;
         this.sequence = sequence;
         this.link = link;
-        this.languageScore = languageScore;
         this.rank = rank;
         this.districtName = districtName;
         this.headCount = headCount;

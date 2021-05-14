@@ -10,6 +10,7 @@ import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Department;
+import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.entity.Subject;
 
@@ -30,6 +31,7 @@ class AnnouncementRepositoryTest {
     private List<Certificate> certificates;
     private List<Department> departments;
     private List<Subject> subjects;
+    private List<Language> languages;
     private List<String> notes;
     private Announcement announcement;
 
@@ -49,6 +51,10 @@ class AnnouncementRepositoryTest {
             Subject.builder().name("subject1").build(),
             Subject.builder().name("subject2").build()
         );
+        languages = List.of(
+            Language.builder().name("language1").build(),
+            Language.builder().name("language2").build()
+        );
         notes = List.of("note1", "note2");
         announcement = Announcement.builder()
                                    .company(company)
@@ -56,13 +62,13 @@ class AnnouncementRepositoryTest {
                                    .certificates(certificates)
                                    .departments(departments)
                                    .subjects(subjects)
+                                   .languages(languages)
                                    .recruitType("recruitType")
                                    .recruitLevel("recruitLevel")
                                    .workingType("workingType")
                                    .receiptTimestamp(LocalDate.of(2021, 4, 22))
                                    .sequence("sequence")
                                    .link("link")
-                                   .languageScore(0)
                                    .rank("rank")
                                    .districtName("district")
                                    .headCount(0)
@@ -79,6 +85,9 @@ class AnnouncementRepositoryTest {
         for (Subject each : subjects) {
             em.persistAndFlush(each);
         }
+        for (Language each : languages) {
+            em.persistAndFlush(each);
+        }
         em.persistAndFlush(announcement);
         em.clear();
     }
@@ -92,6 +101,7 @@ class AnnouncementRepositoryTest {
         assertEquals(a.getAnnouncementCertificates().size(), certificates.size());
         assertEquals(a.getAnnouncementDepartments().size(), departments.size());
         assertEquals(a.getAnnouncementSubjects().size(), subjects.size());
+        assertEquals(a.getAnnouncementLanguages().size(), languages.size());
         assertEquals(a.getAnnouncementNotes().size(), notes.size());
         assertEquals(
             certificates.stream().map(each -> each.getId()).collect(Collectors.toList()),
