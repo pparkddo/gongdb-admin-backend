@@ -46,6 +46,9 @@ public class Announcement {
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementSubject> announcementSubjects = new ArrayList<>();
 
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AnnouncementNote> announcementNotes = new ArrayList<>();
+
     @NotNull
     private String recruitType;
 
@@ -97,6 +100,16 @@ public class Announcement {
         );
     }
 
+    public void addNote(String note) {
+        this.announcementNotes.add(
+            AnnouncementNote
+            .builder()
+            .announcement(this)
+            .note(note)
+            .build()
+        );
+    }
+
     public void addCertificates(List<Certificate> certificates) {
         certificates.forEach(each -> addCertificate(each));
     }
@@ -107,6 +120,10 @@ public class Announcement {
 
     public void addSubjects(List<Subject> subjects) {
         subjects.forEach(each -> addSubject(each));
+    }
+
+    public void addNotes(List<String> notes) {
+        notes.forEach(each -> addNote(each));
     }
 
     @Builder
@@ -125,7 +142,8 @@ public class Announcement {
         Integer languageScore,
         String rank,
         String districtName,
-        int headCount
+        int headCount,
+        List<String> notes
     ) {
         this.company = company;
         this.position = position;
@@ -142,5 +160,6 @@ public class Announcement {
         this.rank = rank;
         this.districtName = districtName;
         this.headCount = headCount;
+        addNotes(notes);
     }
 }

@@ -30,6 +30,7 @@ class AnnouncementRepositoryTest {
     private List<Certificate> certificates;
     private List<Department> departments;
     private List<Subject> subjects;
+    private List<String> notes;
     private Announcement announcement;
 
     @BeforeEach
@@ -48,6 +49,7 @@ class AnnouncementRepositoryTest {
             Subject.builder().name("subject1").build(),
             Subject.builder().name("subject2").build()
         );
+        notes = List.of("note1", "note2");
         announcement = Announcement.builder()
                                    .company(company)
                                    .position(position)
@@ -64,6 +66,7 @@ class AnnouncementRepositoryTest {
                                    .rank("rank")
                                    .districtName("district")
                                    .headCount(0)
+                                   .notes(notes)
                                    .build();
         em.persistAndFlush(company);
         em.persistAndFlush(position);
@@ -89,6 +92,7 @@ class AnnouncementRepositoryTest {
         assertEquals(a.getAnnouncementCertificates().size(), certificates.size());
         assertEquals(a.getAnnouncementDepartments().size(), departments.size());
         assertEquals(a.getAnnouncementSubjects().size(), subjects.size());
+        assertEquals(a.getAnnouncementNotes().size(), notes.size());
         assertEquals(
             certificates.stream().map(each -> each.getId()).collect(Collectors.toList()),
             a.getAnnouncementCertificates().stream().map(each -> each.getCertificate().getId()).collect(Collectors.toList())
@@ -106,6 +110,21 @@ class AnnouncementRepositoryTest {
 
         Long count = em.getEntityManager()
                        .createQuery("SELECT COUNT(*) FROM AnnouncementCertificate a", Long.class)
+                       .getSingleResult();
+        assertEquals(0, count);
+    }
+    
+	@Test
+    public void orphanRemoveAnnouncementNote() {
+        Announcement a = em.find(Announcement.class, announcement.getId());
+
+        // announcement 를 삭제함으로써 참조를 잃어버린 AnnouncementNote 도 같이 삭제한다 (orphanRemove)
+        em.remove(a);
+        em.flush();
+        em.clear();
+
+        Long count = em.getEntityManager()
+                       .createQuery("SELECT COUNT(*) FROM AnnouncementNote a", Long.class)
                        .getSingleResult();
         assertEquals(0, count);
     }
