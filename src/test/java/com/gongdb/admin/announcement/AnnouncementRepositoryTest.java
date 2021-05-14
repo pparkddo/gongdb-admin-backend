@@ -61,9 +61,9 @@ class AnnouncementRepositoryTest {
                                    .sequence("sequence")
                                    .link("link")
                                    .languageScore(0)
-                                   .languagePerfectScore(0)
                                    .rank("rank")
-                                   .isEither(true)
+                                   .districtName("district")
+                                   .headCount(0)
                                    .build();
         em.persistAndFlush(company);
         em.persistAndFlush(position);

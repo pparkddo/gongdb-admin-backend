@@ -55,13 +55,17 @@ public class Announcement {
     @NotNull
     private String workingType;
 
+    @NotNull
+    private String districtName;
+
+    @NotNull
+    private int headCount;
+
     private LocalDate receiptTimestamp;
     private String sequence;
     private String link;
     private Integer languageScore;
-    private Integer languagePerfectScore;
     private String rank;
-    private Boolean isEither;
 
     public void addCertificate(Certificate certificate) {
         this.announcementCertificates.add(
@@ -119,9 +123,9 @@ public class Announcement {
         String sequence,
         String link,
         Integer languageScore,
-        Integer languagePerfectScore,
         String rank,
-        Boolean isEither
+        String districtName,
+        int headCount
     ) {
         this.company = company;
         this.position = position;
@@ -135,8 +139,8 @@ public class Announcement {
         this.sequence = sequence;
         this.link = link;
         this.languageScore = languageScore;
-        this.languagePerfectScore = languagePerfectScore;
         this.rank = rank;
-        this.isEither = isEither;
+        this.districtName = districtName;
+        this.headCount = headCount;
     }
 }
