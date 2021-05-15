@@ -3,9 +3,12 @@ package com.gongdb.admin.announcement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
@@ -32,6 +35,7 @@ class AnnouncementRepositoryTest {
     private List<Department> departments;
     private List<Subject> subjects;
     private List<Language> languages;
+    private List<LanguageScore> languageScores;
     private List<String> notes;
     private Announcement announcement;
 
@@ -55,6 +59,9 @@ class AnnouncementRepositoryTest {
             Language.builder().name("language1").build(),
             Language.builder().name("language2").build()
         );
+        languageScores = languages.stream()
+                                  .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
+                                  .collect(Collectors.toList());
         notes = List.of("note1", "note2");
         announcement = Announcement.builder()
                                    .company(company)
@@ -62,11 +69,11 @@ class AnnouncementRepositoryTest {
                                    .certificates(certificates)
                                    .departments(departments)
                                    .subjects(subjects)
-                                   .languages(languages)
+                                   .languageScores(languageScores)
                                    .recruitType("recruitType")
                                    .recruitLevel("recruitLevel")
                                    .workingType("workingType")
-                                   .receiptTimestamp(LocalDate.of(2021, 4, 22))
+                                   .receiptTimestamp(LocalDateTime.of(LocalDate.of(2021, 4, 22), LocalTime.of(0, 0)))
                                    .sequence("sequence")
                                    .link("link")
                                    .rank("rank")
@@ -101,7 +108,7 @@ class AnnouncementRepositoryTest {
         assertEquals(a.getAnnouncementCertificates().size(), certificates.size());
         assertEquals(a.getAnnouncementDepartments().size(), departments.size());
         assertEquals(a.getAnnouncementSubjects().size(), subjects.size());
-        assertEquals(a.getAnnouncementLanguages().size(), languages.size());
+        assertEquals(a.getAnnouncementLanguageScores().size(), languageScores.size());
         assertEquals(a.getAnnouncementNotes().size(), notes.size());
         assertEquals(
             certificates.stream().map(each -> each.getId()).collect(Collectors.toList()),

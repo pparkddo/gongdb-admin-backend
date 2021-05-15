@@ -1,6 +1,6 @@
 package com.gongdb.admin.announcement.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import com.gongdb.admin.announcement.embeddable.LanguageScore;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -47,7 +49,7 @@ public class Announcement {
     private List<AnnouncementSubject> announcementSubjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<AnnouncementLanguage> announcementLanguages = new ArrayList<>();
+    private List<AnnouncementLanguageScore> announcementLanguageScores = new ArrayList<>();
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementNote> announcementNotes = new ArrayList<>();
@@ -67,7 +69,7 @@ public class Announcement {
     @NotNull
     private int headCount;
 
-    private LocalDate receiptTimestamp;
+    private LocalDateTime receiptTimestamp;
     private String sequence;
     private String link;
     private String rank;
@@ -102,12 +104,12 @@ public class Announcement {
         );
     }
 
-    public void addLanguage(Language language) {
-        this.announcementLanguages.add(
-            AnnouncementLanguage
+    public void addLanguageScore(LanguageScore languageScore) {
+        this.announcementLanguageScores.add(
+            AnnouncementLanguageScore
             .builder()
             .announcement(this)
-            .language(language)
+            .languageScore(languageScore)
             .build()
         );
     }
@@ -134,8 +136,8 @@ public class Announcement {
         subjects.forEach(each -> addSubject(each));
     }
 
-    public void addLanguages(List<Language> languages) {
-        languages.forEach(each -> addLanguage(each));
+    public void addLanguageScores(List<LanguageScore> languageScores) {
+        languageScores.forEach(each -> addLanguageScore(each));
     }
 
     public void addNotes(List<String> notes) {
@@ -149,11 +151,11 @@ public class Announcement {
         List<Certificate> certificates,
         List<Department> departments,
         List<Subject> subjects,
-        List<Language> languages,
+        List<LanguageScore> languageScores,
         String recruitType,
         String recruitLevel,
         String workingType,
-        LocalDate receiptTimestamp,
+        LocalDateTime receiptTimestamp,
         String sequence,
         String link,
         String rank,
@@ -166,7 +168,7 @@ public class Announcement {
         addCertificates(certificates);
         addDepartments(departments);
         addSubjects(subjects);
-        addLanguages(languages);
+        addLanguageScores(languageScores);
         this.recruitType = recruitType;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;

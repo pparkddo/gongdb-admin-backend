@@ -1,11 +1,14 @@
 package com.gongdb.admin.announcement.entity;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+
+import com.gongdb.admin.announcement.embeddable.LanguageScore;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class AnnouncementLanguage {
+public class AnnouncementLanguageScore {
     
     @Id
     @GeneratedValue
@@ -26,14 +29,12 @@ public class AnnouncementLanguage {
     @JoinColumn(name = "announcement_id")
     private Announcement announcement;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "language_id")
-    private Language language;
+    @Embedded
+    private LanguageScore languageScore;
 
     @Builder
-    public AnnouncementLanguage(Announcement announcement, Language language) {
+    public AnnouncementLanguageScore(Announcement announcement, LanguageScore languageScore) {
         this.announcement = announcement;
-        this.language = language;
+        this.languageScore = languageScore;
     }
 }
