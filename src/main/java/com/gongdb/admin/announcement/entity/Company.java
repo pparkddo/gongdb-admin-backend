@@ -1,5 +1,6 @@
 package com.gongdb.admin.announcement.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ public class Company {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     @Builder
