@@ -2,6 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.repository.CertificateRepository;
 import com.gongdb.admin.announcement.service.CertificateService;
 
@@ -21,7 +22,7 @@ public class CertificateServiceTest {
     @Test
     public void getOrCreateTest() {
         String alreadyExistsName = "name1";
-        certificateService.create(alreadyExistsName);
+        certificateService.create(Certificate.builder().name(alreadyExistsName).build());
 
         certificateService.getOrCreate(alreadyExistsName);
         assertEquals(certificateRepository.count(), 1);

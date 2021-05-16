@@ -16,11 +16,12 @@ public class CertificateService {
 
     @Transactional
     public Certificate getOrCreate(String name) {
-        return certificateRepository.findByName(name).orElseGet(() -> create(name));
+        return certificateRepository
+                    .findByName(name)
+                    .orElseGet(() -> create(Certificate.builder().name(name).build()));
     }
 
-    public Certificate create(String name) {
-        Certificate certificate = Certificate.builder().name(name).build();
+    public Certificate create(Certificate certificate) {
         return certificateRepository.save(certificate);
     }
 }
