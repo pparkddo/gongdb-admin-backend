@@ -1,6 +1,7 @@
 package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.repository.CertificateRepository;
@@ -9,6 +10,7 @@ import com.gongdb.admin.announcement.service.CertificateService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @SpringBootTest
 public class CertificateServiceTest {
@@ -18,6 +20,17 @@ public class CertificateServiceTest {
 
     @Autowired
     private CertificateRepository certificateRepository;
+
+    @Test
+    public void createDuplicateTest() {
+        String name = "certificate";
+        certificateRepository.save(Certificate.builder().name(name).build());
+
+        assertThrows(
+            DataIntegrityViolationException.class,
+            () -> certificateRepository.save(Certificate.builder().name(name).build())
+        );
+    }
 
     @Test
     public void getOrCreateTest() {
