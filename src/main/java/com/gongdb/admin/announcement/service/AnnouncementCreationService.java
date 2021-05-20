@@ -37,7 +37,7 @@ public class AnnouncementCreationService {
         List<Department> departments = getOrCreateDepartments(announcementInputFormDto);
         List<LanguageScore> languageScores = getOrCreateLanguageScores(announcementInputFormDto);
         Position position = positionService.getOrCreate(announcementInputFormDto.getPositionName());
-        List<Subject> subjects = getOrCreSubjects(announcementInputFormDto);
+        List<Subject> subjects = getOrCreateSubjects(announcementInputFormDto);
         Announcement announcement = 
             Announcement.builder()
                         .certificates(certificates)
@@ -88,7 +88,7 @@ public class AnnouncementCreationService {
             .collect(Collectors.toList());
     }
     
-    private List<Subject> getOrCreSubjects(AnnouncementInputFormDto announcementInputFormDto) {
+    private List<Subject> getOrCreateSubjects(AnnouncementInputFormDto announcementInputFormDto) {
         return announcementInputFormDto
             .getSubjects()
             .stream()
