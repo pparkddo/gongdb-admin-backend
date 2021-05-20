@@ -2,9 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,72 +27,39 @@ class AnnouncementRepositoryTest {
     @Autowired
     private TestEntityManager em;
 
-    private Company company;
-    private Position position;
-    private List<Certificate> certificates;
-    private List<Department> departments;
-    private List<Subject> subjects;
-    private List<Language> languages;
-    private List<LanguageScore> languageScores;
-    private List<String> notes;
     private Announcement announcement;
 
     @BeforeEach
     public void init() {
-        company = Company.builder().name("Test company").build();
-        position = Position.builder().name("Test position").build();
-        certificates = List.of(
-            Certificate.builder().name("certificate1").build(),
-            Certificate.builder().name("certificate2").build()
-        );
-        departments = List.of(
-            Department.builder().name("department1").build(),
-            Department.builder().name("department2").build()
-        );
-        subjects = List.of(
-            Subject.builder().name("subject1").build(),
-            Subject.builder().name("subject2").build()
-        );
-        languages = List.of(
-            Language.builder().name("language1").build(),
-            Language.builder().name("language2").build()
-        );
-        languageScores = languages.stream()
-                                  .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
-                                  .collect(Collectors.toList());
-        notes = List.of("note1", "note2");
+        Company company = getCompany("company");
+        Position position = getPosition("position");
+        List<Certificate> certificates = getCertificates(List.of("certificate1", "certificate2"));
+        List<Department> departments = getDepartments(List.of("department1", "department2"));
+        List<Subject> subjects = getSubjects(List.of("subject1", "subject2"));
+        List<Language> languages = getLanguages(List.of("language1", "language2"));
         announcement = Announcement.builder()
-                                   .company(company)
-                                   .position(position)
-                                   .certificates(certificates)
-                                   .departments(departments)
-                                   .subjects(subjects)
-                                   .languageScores(languageScores)
-                                   .recruitType("recruitType")
-                                   .recruitLevel("recruitLevel")
-                                   .workingType("workingType")
-                                   .receiptTimestamp(LocalDateTime.of(LocalDate.of(2021, 4, 22), LocalTime.of(0, 0)))
-                                   .sequence("sequence")
-                                   .link("link")
-                                   .rank("rank")
-                                   .districtName("district")
-                                   .headCount(0)
-                                   .notes(notes)
-                                   .build();
+                            .company(company)
+                            .position(position)
+                            .certificates(certificates)
+                            .departments(departments)
+                            .subjects(subjects)
+                            .languageScores(getLanguageScores(languages))
+                            .recruitType("recruitType")
+                            .recruitLevel("recruitLevel")
+                            .workingType("workingType")
+                            .receiptTimestamp(LocalDateTime.of(2021, 4, 22, 0, 0))
+                            .sequence("sequence")
+                            .link("link")
+                            .rank("rank")
+                            .districtName("district")
+                            .headCount(0)
+                            .notes(List.of("note1", "note2")).build();
         em.persistAndFlush(company);
         em.persistAndFlush(position);
-        for (Certificate each : certificates) {
-            em.persistAndFlush(each);
-        }
-        for (Department each : departments) {
-            em.persistAndFlush(each);
-        }
-        for (Subject each : subjects) {
-            em.persistAndFlush(each);
-        }
-        for (Language each : languages) {
-            em.persistAndFlush(each);
-        }
+        certificates.forEach(em::persistAndFlush);
+        departments.forEach(em::persistAndFlush);
+        subjects.forEach(em::persistAndFlush);
+        languages.forEach(em::persistAndFlush);
         em.persistAndFlush(announcement);
         em.clear();
     }
@@ -103,16 +68,16 @@ class AnnouncementRepositoryTest {
     public void createAndFindAnnouncement() {
         Announcement a = em.find(Announcement.class, announcement.getId());
 
-        assertEquals(company.getName(), a.getCompany().getName());
-        assertEquals(position.getName(), a.getPosition().getName());
-        assertEquals(a.getAnnouncementCertificates().size(), certificates.size());
-        assertEquals(a.getAnnouncementDepartments().size(), departments.size());
-        assertEquals(a.getAnnouncementSubjects().size(), subjects.size());
-        assertEquals(a.getAnnouncementLanguageScores().size(), languageScores.size());
-        assertEquals(a.getAnnouncementNotes().size(), notes.size());
+        assertEquals("company", a.getCompany().getName());
+        assertEquals("position", a.getPosition().getName());
+        assertEquals(2, a.getAnnouncementCertificates().size());
+        assertEquals(2, a.getAnnouncementDepartments().size());
+        assertEquals(2, a.getAnnouncementSubjects().size());
+        assertEquals(2, a.getAnnouncementLanguageScores().size());
+        assertEquals(2, a.getAnnouncementNotes().size());
         assertEquals(
-            certificates.stream().map(each -> each.getId()).collect(Collectors.toList()),
-            a.getAnnouncementCertificates().stream().map(each -> each.getCertificate().getId()).collect(Collectors.toList())
+            List.of("certificate1", "certificate2"),
+            a.getAnnouncementCertificates().stream().map(each -> each.getCertificate().getName()).collect(Collectors.toList())
         );
     }
 
@@ -144,5 +109,35 @@ class AnnouncementRepositoryTest {
                        .createQuery("SELECT COUNT(*) FROM AnnouncementNote a", Long.class)
                        .getSingleResult();
         assertEquals(0, count);
+    }
+
+    private Company getCompany(String company) {
+        return Company.builder().name(company).build();
+    }
+
+    private Position getPosition(String position) {
+        return Position.builder().name(position).build();
+    }
+
+    private List<Certificate> getCertificates(List<String> certificates) {
+        return certificates.stream().map(each -> Certificate.builder().name(each).build()).collect(Collectors.toList());
+    }
+
+    private List<Department> getDepartments(List<String> departments) {
+        return departments.stream().map(each -> Department.builder().name(each).build()).collect(Collectors.toList());
+    }
+
+    private List<Subject> getSubjects(List<String> subjects) {
+        return subjects.stream().map(each -> Subject.builder().name(each).build()).collect(Collectors.toList());
+    }
+
+    private List<Language> getLanguages(List<String> languages) {
+        return languages.stream().map(each -> Language.builder().name(each).build()).collect(Collectors.toList());
+    }
+
+    private List<LanguageScore> getLanguageScores(List<Language> languages) {
+        return languages.stream()
+                    .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
+                    .collect(Collectors.toList());
     }
 }

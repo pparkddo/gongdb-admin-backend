@@ -2,9 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,55 +57,27 @@ public class AnnouncementServiceTest {
     @Autowired
     private AnnouncementService announcementService;
 
-    private Announcement createAnnouncement() {
-        Company company = companyService.getOrCreate("company");
-        Position position = positionService.getOrCreate("position");
-        List<Certificate> certificates = List.of("certificate1", "certificate2")
-                                             .stream()
-                                             .map(certificateService::getOrCreate)
-                                             .collect(Collectors.toList());
-        List <Department> departments = List.of("department1", "department2")
-                                            .stream()
-                                            .map(departmentService::getOrCreate)
-                                            .collect(Collectors.toList());
-        List<Subject> subjects = List.of("subject1", "subject2")
-                                     .stream()
-                                     .map(subjectService::getOrCreate)
-                                     .collect(Collectors.toList());
-        List<Language> languages = List.of("language1", "language2")
-                                       .stream()
-                                       .map(languageService::getOrCreate)
-                                       .collect(Collectors.toList());
-        List<LanguageScore> languageScores = 
-            languages.stream()
-                     .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
-                     .collect(Collectors.toList());
-        List<String> notes = List.of("note1", "note2");
-        Announcement announcement = Announcement
-                                        .builder()
-                                        .company(company)
-                                        .position(position)
-                                        .certificates(certificates)
-                                        .departments(departments)
-                                        .subjects(subjects)
-                                        .languageScores(languageScores)
-                                        .recruitType("recruitType")
-                                        .recruitLevel("recruitLevel")
-                                        .workingType("workingType")
-                                        .receiptTimestamp(LocalDateTime.of(LocalDate.of(2021, 4, 22), LocalTime.of(0, 0)))
-                                        .sequence("sequence")
-                                        .link("link")
-                                        .rank("rank")
-                                        .districtName("district")
-                                        .headCount(0)
-                                        .notes(notes)
-                                        .build();
-        return announcementRepository.save(announcement);
-    }
-
     @Test
     public void getTest() {
-        Announcement announcement = createAnnouncement();
+        Announcement announcement = 
+            Announcement.builder()
+                .company(getOrCreateCompany("company"))
+                .position(getOrCreatePosition("position"))
+                .certificates(getOrCreateCertificates(List.of("certificate1", "certificate2")))
+                .departments(getOrCreateDepartments(List.of("department1", "department2")))
+                .subjects(getOrCreateSubjects(List.of("subject1", "subject2")))
+                .languageScores(getLanguageScores(getOrCreateLanguages(List.of("language1", "language2"))))
+                .recruitType("recruitType")
+                .recruitLevel("recruitLevel")
+                .workingType("workingType")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 20, 0, 0))
+                .sequence("sequence")
+                .link("link")
+                .rank("rank")
+                .districtName("districtName")
+                .headCount(0)
+                .notes(List.of("note1", "note2")).build();
+        announcementRepository.saveAndFlush(announcement);
 
         AnnouncementDto announcementDto = announcementService.get(announcement.getId());
 
@@ -118,13 +88,79 @@ public class AnnouncementServiceTest {
 
     @Test
     public void getAllTest() {
-        Announcement announcement1 = createAnnouncement();
-        Announcement announcement2 = createAnnouncement();
+        Announcement announcement1 = 
+            Announcement.builder()
+                .company(getOrCreateCompany("company"))
+                .position(getOrCreatePosition("position"))
+                .certificates(getOrCreateCertificates(List.of("certificate1", "certificate2")))
+                .departments(getOrCreateDepartments(List.of("department1", "department2")))
+                .subjects(getOrCreateSubjects(List.of("subject1", "subject2")))
+                .languageScores(getLanguageScores(getOrCreateLanguages(List.of("language1", "language2"))))
+                .recruitType("recruitType")
+                .recruitLevel("recruitLevel")
+                .workingType("workingType")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 20, 0, 0))
+                .sequence("sequence")
+                .link("link")
+                .rank("rank")
+                .districtName("districtName")
+                .headCount(0)
+                .notes(List.of("note1", "note2")).build();
+        announcementRepository.saveAndFlush(announcement1);
+        Announcement announcement2 = 
+            Announcement.builder()
+                .company(getOrCreateCompany("company"))
+                .position(getOrCreatePosition("position"))
+                .certificates(getOrCreateCertificates(List.of("certificate1", "certificate2")))
+                .departments(getOrCreateDepartments(List.of("department1", "department2")))
+                .subjects(getOrCreateSubjects(List.of("subject1", "subject2")))
+                .languageScores(getLanguageScores(getOrCreateLanguages(List.of("language1", "language2"))))
+                .recruitType("recruitType")
+                .recruitLevel("recruitLevel")
+                .workingType("workingType")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 20, 0, 0))
+                .sequence("sequence")
+                .link("link")
+                .rank("rank")
+                .districtName("districtName")
+                .headCount(0)
+                .notes(List.of("note1", "note2")).build();
+        announcementRepository.saveAndFlush(announcement2);
 
         List<AnnouncementDto> announcementDtoList = announcementService.getAll();
 
         assertEquals(2, announcementDtoList.size());
         assertEquals(List.of(announcement1.getId(), announcement2.getId()),
                      announcementDtoList.stream().map(each -> each.getId()).collect(Collectors.toList()));
+    }
+
+    private Company getOrCreateCompany(String company) {
+        return companyService.getOrCreate(company);
+    }
+
+    private Position getOrCreatePosition(String position) {
+        return positionService.getOrCreate(position);
+    }
+
+    private List<Certificate> getOrCreateCertificates(List<String> certificates) {
+        return certificates.stream().map(certificateService::getOrCreate).collect(Collectors.toList());
+    }
+
+    private List<Department> getOrCreateDepartments(List<String> departments) {
+        return departments.stream().map(departmentService::getOrCreate).collect(Collectors.toList());
+    }
+
+    private List<Subject> getOrCreateSubjects(List<String> subjects) {
+        return subjects.stream().map(subjectService::getOrCreate).collect(Collectors.toList());
+    }
+
+    private List<Language> getOrCreateLanguages(List<String> languages) {
+        return languages.stream().map(languageService::getOrCreate).collect(Collectors.toList());
+    }
+
+    private List<LanguageScore> getLanguageScores(List<Language> languages) {
+        return languages.stream()
+                        .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
+                        .collect(Collectors.toList());
     }
 }

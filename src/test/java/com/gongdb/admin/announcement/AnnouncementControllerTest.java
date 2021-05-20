@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
 
@@ -31,28 +32,23 @@ public class AnnouncementControllerTest {
     @Test
     public void createAnnouncementTest() throws Exception {
         AnnouncementInputFormDto announcementInputFormDto = 
-            AnnouncementInputFormDto
-            .builder()
-            .certificates(List.of("certificate1", "certificates2"))
-            .companyName("회사명")
-            .departments(List.of("department1", "department2"))
-            .districtName("districtName")
-            .headCount(0)
-            .link("link")
-            .notes(List.of("note1", "note2"))
-            .positionName("positionName")
-            .rank("rank")
-            .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-            .recruitLevel("recruitLevel")
-            .recruitType("recruitType")
-            .sequence("sequence")
-            .subjects(List.of("subject1", "subject2"))
-            .workingType("workingType")
-            .build();
-        String content = 
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                        .writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(announcementInputFormDto);
+            AnnouncementInputFormDto.builder()
+                .certificates(List.of("certificate1", "certificates2"))
+                .companyName("회사명")
+                .departments(List.of("department1", "department2"))
+                .districtName("districtName")
+                .headCount(0)
+                .link("link")
+                .notes(List.of("note1", "note2"))
+                .positionName("positionName")
+                .rank("rank")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
+                .recruitLevel("recruitLevel")
+                .recruitType("recruitType")
+                .sequence("sequence")
+                .subjects(List.of("subject1", "subject2"))
+                .workingType("workingType").build();
+        String content = convertToNonNullValueJsonString(announcementInputFormDto);
 
         this.mockMvc
             .perform(
@@ -67,26 +63,21 @@ public class AnnouncementControllerTest {
     @Test
     public void createBadRequestAnnouncementTest() throws Exception {
         AnnouncementInputFormDto announcementInputFormDto = 
-            AnnouncementInputFormDto
-            .builder()
-            .departments(List.of("department1", "department2"))
-            .districtName("districtName")
-            .headCount(0)
-            .link("link")
-            .notes(List.of("note1", "note2"))
-            .positionName("positionName")
-            .rank("rank")
-            .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-            .recruitLevel("recruitLevel")
-            .recruitType("recruitType")
-            .sequence("sequence")
-            .subjects(List.of("subject1", "subject2"))
-            .workingType("workingType")
-            .build();
-        String content = 
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                        .writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(announcementInputFormDto);
+            AnnouncementInputFormDto.builder()
+                .departments(List.of("department1", "department2"))
+                .districtName("districtName")
+                .headCount(0)
+                .link("link")
+                .notes(List.of("note1", "note2"))
+                .positionName("positionName")
+                .rank("rank")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
+                .recruitLevel("recruitLevel")
+                .recruitType("recruitType")
+                .sequence("sequence")
+                .subjects(List.of("subject1", "subject2"))
+                .workingType("workingType").build();
+        String content = convertToNonNullValueJsonString(announcementInputFormDto);
         
         this.mockMvc
             .perform(
@@ -96,5 +87,11 @@ public class AnnouncementControllerTest {
             )
             .andDo(print())
             .andExpect(status().isBadRequest());
+    }
+
+    private String convertToNonNullValueJsonString(Object value) throws JsonProcessingException {
+        return objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                           .writerWithDefaultPrettyPrinter()
+                           .writeValueAsString(value);
     }
 }
