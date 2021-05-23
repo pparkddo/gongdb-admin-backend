@@ -27,6 +27,8 @@ import com.gongdb.admin.announcement.service.SubjectService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -127,9 +129,9 @@ public class AnnouncementServiceTest {
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement2);
 
-        List<AnnouncementDto> announcementDtoList = announcementService.getAll();
+        Page<AnnouncementDto> announcementDtoList = announcementService.getAll(PageRequest.of(0, 10));
 
-        assertEquals(2, announcementDtoList.size());
+        assertEquals(2, announcementDtoList.getContent().size());
         assertEquals(List.of(announcement1.getId(), announcement2.getId()),
                      announcementDtoList.stream().map(each -> each.getId()).collect(Collectors.toList()));
     }

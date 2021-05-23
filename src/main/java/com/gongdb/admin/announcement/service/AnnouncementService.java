@@ -1,12 +1,11 @@
 package com.gongdb.admin.announcement.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.gongdb.admin.announcement.dto.AnnouncementDto;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.repository.AnnouncementRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +18,9 @@ public class AnnouncementService {
     
     private final AnnouncementRepository announcementRepository;
 
-    public List<AnnouncementDto> getAll() {
-        List<Announcement> announcements = announcementRepository.findAll();
-        return announcements.stream().map(AnnouncementDto::of).collect(Collectors.toList());
+    public Page<AnnouncementDto> getAll(Pageable pageable) {
+        Page<Announcement> announcements = announcementRepository.findAll(pageable);
+        return announcements.map(AnnouncementDto::of);
     }
 
     public AnnouncementDto get(Long id) {

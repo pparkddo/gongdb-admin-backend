@@ -1,7 +1,6 @@
 package com.gongdb.admin.announcement.controller;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -11,6 +10,10 @@ import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +32,8 @@ public class AnnouncementController {
     private final AnnouncementCreationService announcementCreationService;
 
     @GetMapping
-    public List<AnnouncementDto> getAnnouncement() {
-        return announcementService.getAll();
+    public Page<AnnouncementDto> getAnnouncement(@PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
+        return announcementService.getAll(pageable);
     }
     
     @GetMapping("/{id}")
