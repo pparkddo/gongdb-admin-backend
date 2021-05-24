@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.controller;
+package com.gongdb.admin.announcement.api;
 
 import java.util.Collections;
 import java.util.Map;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/announcement")
+@RequestMapping("/api/announcement")
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;

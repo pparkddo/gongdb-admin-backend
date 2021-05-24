@@ -52,7 +52,7 @@ public class AnnouncementControllerTest {
 
         this.mockMvc
             .perform(
-                post("/announcement")
+                post("/api/announcement")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
@@ -81,7 +81,7 @@ public class AnnouncementControllerTest {
         
         this.mockMvc
             .perform(
-                post("/announcement")
+                post("/api/announcement")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
