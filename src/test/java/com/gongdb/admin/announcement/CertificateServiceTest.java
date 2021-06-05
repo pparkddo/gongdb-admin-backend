@@ -2,7 +2,12 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.gongdb.admin.announcement.dto.CertificateDto;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.repository.CertificateRepository;
 import com.gongdb.admin.announcement.service.CertificateService;
@@ -47,5 +52,14 @@ public class CertificateServiceTest {
         certificateService.getOrCreate(alreadyExistsName);
         certificateService.getOrCreate(newName);
         assertEquals(certificateRepository.count(), 2);
+    }
+
+    @Test
+    public void getAllTest() {
+        List.of("name1", "name2").stream().forEach(certificateService::getOrCreate);
+
+        List<CertificateDto> certificates = certificateService.getAll();
+        assertEquals(certificates.size(), 2);
+        assertTrue(certificates.stream().map(each -> each.getName()).collect(Collectors.toList()).contains("name1"));
     }
 }

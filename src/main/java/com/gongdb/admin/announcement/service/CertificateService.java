@@ -1,5 +1,9 @@
 package com.gongdb.admin.announcement.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.gongdb.admin.announcement.dto.CertificateDto;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.repository.CertificateRepository;
 
@@ -23,5 +27,9 @@ public class CertificateService {
 
     public Certificate create(Certificate certificate) {
         return certificateRepository.save(certificate);
+    }
+
+    public List<CertificateDto> getAll() {
+        return certificateRepository.findAll().stream().map(CertificateDto::of).collect(Collectors.toList());
     }
 }
