@@ -1,5 +1,9 @@
 package com.gongdb.admin.announcement.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.gongdb.admin.announcement.dto.DepartmentDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.repository.DepartmentRepository;
 
@@ -23,5 +27,9 @@ public class DepartmentService {
 
     public Department create(Department department) {
         return departmentRepository.save(department);
+    }
+
+    public List<DepartmentDto> getAll() {
+        return departmentRepository.findAll().stream().map(DepartmentDto::of).collect(Collectors.toList());
     }
 }

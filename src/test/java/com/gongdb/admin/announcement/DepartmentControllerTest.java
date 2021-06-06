@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
-import com.gongdb.admin.announcement.service.CertificateService;
+import com.gongdb.admin.announcement.service.DepartmentService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class CertificateControllerTest {
+public class DepartmentControllerTest {
     
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private CertificateService certificateService;
+    private DepartmentService departmentService;
 
-    private static final String END_POINT = "/api/certificate";
+    private static final String END_POINT = "/api/department";
 
     @Test
-    public void getEmptyCertificatesTest() throws Exception {
+    public void getEmptyDepartmentsTest() throws Exception {
         this.mockMvc
             .perform(get(END_POINT))
             .andDo(print())
@@ -40,7 +40,7 @@ public class CertificateControllerTest {
 
     @Test
     public void getCertificatesTest() throws Exception {
-        List.of("name1", "name2").stream().forEach(certificateService::getOrCreate);
+        List.of("name1", "name2").stream().forEach(departmentService::getOrCreate);
 
         this.mockMvc
             .perform(get(END_POINT))
