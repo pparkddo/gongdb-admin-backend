@@ -27,4 +27,9 @@ public class AnnouncementService {
         Announcement announcement = announcementRepository.findById(id).orElseThrow();
         return AnnouncementDto.of(announcement);
     }
+
+    public AnnouncementDto getRecentAnnouncement() {
+        Announcement announcement = announcementRepository.findFirstByOrderByIdDesc().orElseThrow();
+        return AnnouncementDto.of(announcement);
+    }
 }

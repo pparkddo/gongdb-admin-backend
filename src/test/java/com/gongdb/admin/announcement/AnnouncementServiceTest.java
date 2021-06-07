@@ -1,9 +1,11 @@
 package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.AnnouncementDto;
@@ -134,6 +136,34 @@ public class AnnouncementServiceTest {
         assertEquals(2, announcementDtoList.getContent().size());
         assertEquals(List.of(announcement1.getId(), announcement2.getId()),
                      announcementDtoList.stream().map(each -> each.getId()).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void getRecentAnnouncementTest() {
+        assertThrows(NoSuchElementException.class, () -> announcementService.getRecentAnnouncement());
+
+        Announcement announcement = 
+            Announcement.builder()
+                .company(getOrCreateCompany("company"))
+                .position(getOrCreatePosition("position"))
+                .certificates(getOrCreateCertificates(List.of("certificate1", "certificate2")))
+                .departments(getOrCreateDepartments(List.of("department1", "department2")))
+                .subjects(getOrCreateSubjects(List.of("subject1", "subject2")))
+                .languageScores(getLanguageScores(getOrCreateLanguages(List.of("language1", "language2"))))
+                .recruitType("recruitType")
+                .recruitLevel("recruitLevel")
+                .workingType("workingType")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 20, 0, 0))
+                .sequence("sequence")
+                .link("link")
+                .rank("rank")
+                .districtName("districtName")
+                .headCount(0)
+                .notes(List.of("note1", "note2")).build();
+        announcementRepository.saveAndFlush(announcement);
+
+        AnnouncementDto announcementDto = announcementService.getRecentAnnouncement();
+        assertEquals(announcement.getId(), announcementDto.getId());
     }
 
     private Company getOrCreateCompany(String company) {

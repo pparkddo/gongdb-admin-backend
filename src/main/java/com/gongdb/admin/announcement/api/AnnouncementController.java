@@ -41,6 +41,11 @@ public class AnnouncementController {
         return announcementService.get(id);
     }
 
+    @GetMapping("/recent")
+    public AnnouncementDto getRecentAnnouncement() {
+        return announcementService.getRecentAnnouncement();
+    }
+
     @PostMapping
     public Map<String, String> createAnnouncement(@Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
         announcementCreationService.create(announcementInputFormDto);
