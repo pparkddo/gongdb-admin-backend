@@ -17,9 +17,12 @@ public class LanguageScoreInputDto {
     @NotNull
     private String score;
 
+    private String perfectScore;
+
     @Builder
-    private LanguageScoreInputDto(String name, String score) {
+    private LanguageScoreInputDto(String name, String score, String perfectScore) {
         this.name = name;
         this.score = score;
+        this.perfectScore = perfectScore;
     }
 }

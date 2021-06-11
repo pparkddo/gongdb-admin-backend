@@ -25,9 +25,12 @@ public class LanguageScore {
     @NotNull
     private String score;
 
+    private String perfectScore;
+
     @Builder
-    public LanguageScore(Language language, String score) {
+    public LanguageScore(Language language, String score, String perfectScore) {
         this.language = language;
         this.score = score;
+        this.perfectScore = perfectScore;
     }
 }

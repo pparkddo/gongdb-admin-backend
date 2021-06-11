@@ -84,6 +84,7 @@ public class AnnouncementCreationService {
                             .builder()
                             .language(languageService.getOrCreate(each.getName()))
                             .score(each.getScore())
+                            .perfectScore(each.getPerfectScore())
                             .build())
             .collect(Collectors.toList());
     }

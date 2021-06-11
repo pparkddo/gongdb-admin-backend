@@ -138,7 +138,11 @@ public class AnnouncementControllerTest {
 
     private List<LanguageScoreInputDto> getLanguageScoreInputDtoList(List<String> languageScores) {
         return languageScores.stream()
-                             .map(each -> LanguageScoreInputDto.builder().name(each).build())
+                             .map(each -> LanguageScoreInputDto.builder()
+                                                               .name(each)
+                                                               .score(each + " score")
+                                                               .perfectScore(each + "perfectScore")
+                                                               .build())
                              .collect(Collectors.toList());
     }
 }

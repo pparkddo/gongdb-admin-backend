@@ -160,12 +160,14 @@ public class AnnouncementDto {
         private Long languageId;
         private String languageName;
         private String score;
+        private String perfectScore;
 
         @Builder
-        private LanguageScore(Long languageId, String languageName, String score) {
+        private LanguageScore(Long languageId, String languageName, String score, String perfectScore) {
             this.languageId = languageId;
             this.languageName = languageName;
             this.score = score;
+            this.perfectScore = perfectScore;
         }
 
         public static LanguageScore of(com.gongdb.admin.announcement.embeddable.LanguageScore languageScore) {
@@ -173,6 +175,7 @@ public class AnnouncementDto {
                                 .languageId(languageScore.getLanguage().getId())
                                 .languageName(languageScore.getLanguage().getName())
                                 .score(languageScore.getScore())
+                                .perfectScore(languageScore.getPerfectScore())
                                 .build();
         }
     }

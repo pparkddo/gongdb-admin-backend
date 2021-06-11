@@ -137,7 +137,11 @@ class AnnouncementRepositoryTest {
 
     private List<LanguageScore> getLanguageScores(List<Language> languages) {
         return languages.stream()
-                    .map(each -> LanguageScore.builder().language(each).score(each + " score").build())
+                    .map(each -> LanguageScore.builder()
+                                              .language(each)
+                                              .score(each + " score")
+                                              .perfectScore(each + " perfectScore")
+                                              .build())
                     .collect(Collectors.toList());
     }
 }
