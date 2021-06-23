@@ -111,6 +111,38 @@ class AnnouncementRepositoryTest {
         assertEquals(0, count);
     }
 
+    @Test
+    public void updateRankTest() {
+        Announcement a = em.find(Announcement.class, announcement.getId());
+
+        a.updateRank("updatedRank");
+        em.persistAndFlush(a);
+
+        assertEquals("updatedRank", a.getRank());
+    }
+
+    @Test
+    public void updateAnnouncementCertificateTest() {
+        Announcement a = em.find(Announcement.class, announcement.getId());
+        List<Certificate> certificates = getCertificates(List.of("certificate3", "certificate4"));
+        certificates.stream().forEach(em::persistAndFlush);
+
+        a.updateCertificates(certificates);
+        em.persistAndFlush(a);
+
+        Long count = em.getEntityManager()
+                       .createQuery("SELECT COUNT(*) FROM Announcement a", Long.class)
+                       .getSingleResult();
+        assertEquals(2, a.getAnnouncementCertificates().size());
+        assertEquals(
+            List.of("certificate3", "certificate4"),
+            a.getAnnouncementCertificates()
+             .stream()
+             .map(each -> each.getCertificate().getName())
+             .collect(Collectors.toList()));
+        assertEquals(1, count);
+    }
+
     private Company getCompany(String company) {
         return Company.builder().name(company).build();
     }

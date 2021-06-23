@@ -2,6 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.dto.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 
 import org.junit.jupiter.api.Test;
@@ -128,6 +130,39 @@ public class AnnouncementControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.company.companyName").value("companyName"));
+    }
+
+    @Test
+    public void updateAnnouncementTest() throws Exception {
+        AnnouncementInputFormDto announcementInputFormDto = 
+            AnnouncementInputFormDto.builder()
+                .certificates(List.of("certificate1", "certificates2"))
+                .companyName("companyName")
+                .departments(List.of("department1", "department2"))
+                .districtName("districtName")
+                .headCount(0)
+                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore1", "languageScore2")))
+                .link("link")
+                .notes(List.of("note1", "note2"))
+                .positionName("positionName")
+                .rank("rank")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
+                .recruitLevel("recruitLevel")
+                .recruitType("recruitType")
+                .sequence("sequence")
+                .subjects(List.of("subject1", "subject2"))
+                .workingType("workingType").build();
+        Announcement announcement = announcementCreationService.create(announcementInputFormDto);
+        String content = convertToNonNullValueJsonString(announcementInputFormDto);
+
+        this.mockMvc
+            .perform(
+                put(END_POINT + "/" + announcement.getId())
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 
     private String convertToNonNullValueJsonString(Object value) throws JsonProcessingException {

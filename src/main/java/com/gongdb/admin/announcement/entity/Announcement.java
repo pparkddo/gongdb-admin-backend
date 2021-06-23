@@ -21,8 +21,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Announcement {
     
     @Id
@@ -74,7 +74,76 @@ public class Announcement {
     private String link;
     private String rank;
 
-    public void addCertificate(Certificate certificate) {
+    public void updateCompany(Company company) {
+        this.company = company;
+    }
+
+    public void updatePosition(Position position) {
+        this.position = position;
+    }
+
+    public void updateRecruitType(String recruitType) {
+        this.recruitType = recruitType;
+    }
+
+    public void updateRecruitLevel(String recruitLevel) {
+        this.recruitLevel = recruitLevel;
+    }
+
+    public void updateWorkingType(String workingType) {
+        this.workingType = workingType;
+    }
+
+    public void updateDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public void updateHeadCount(int headCount) {
+        this.headCount = headCount;
+    }
+
+    public void updateReceiptTimestamp(LocalDateTime receiptDateTime) {
+        this.receiptTimestamp = receiptDateTime;
+    }
+
+    public void updateSequence(String sequence) {
+        this.sequence = sequence;
+    }
+
+    public void updateLink(String link) {
+        this.link = link;
+    }
+
+    public void updateRank(String rank) {
+        this.rank = rank;
+    }
+
+    public void updateCertificates(List<Certificate> certificates) {
+        announcementCertificates.clear();
+        addCertificates(certificates);
+    }
+
+    public void updateDepartments(List<Department> departments) {
+        announcementDepartments.clear();
+        addDepartments(departments);
+    }
+
+    public void updateSubjects(List<Subject> subjects) {
+        announcementSubjects.clear();
+        addSubjects(subjects);
+    }
+
+    public void updateLanguageScores(List<LanguageScore> languageScores) {
+        announcementLanguageScores.clear();
+        addLanguageScores(languageScores);
+    }
+
+    public void updateNotes(List<String> notes) {
+        announcementNotes.clear();
+        addNotes(notes);
+    }
+
+    private void addCertificate(Certificate certificate) {
         this.announcementCertificates.add(
             AnnouncementCertificate
             .builder()
@@ -84,7 +153,7 @@ public class Announcement {
         );
     }
 
-    public void addDepartment(Department department) {
+    private void addDepartment(Department department) {
         this.announcementDepartments.add(
             AnnouncementDepartment 
             .builder()
@@ -94,7 +163,7 @@ public class Announcement {
         );
     }
 
-    public void addSubject(Subject subject) {
+    private void addSubject(Subject subject) {
         this.announcementSubjects.add(
             AnnouncementSubject
             .builder()
@@ -104,7 +173,7 @@ public class Announcement {
         );
     }
 
-    public void addLanguageScore(LanguageScore languageScore) {
+    private void addLanguageScore(LanguageScore languageScore) {
         this.announcementLanguageScores.add(
             AnnouncementLanguageScore
             .builder()
@@ -114,7 +183,7 @@ public class Announcement {
         );
     }
 
-    public void addNote(String note) {
+    private void addNote(String note) {
         this.announcementNotes.add(
             AnnouncementNote
             .builder()
@@ -124,45 +193,33 @@ public class Announcement {
         );
     }
 
-    public void addCertificates(List<Certificate> certificates) {
+    private void addCertificates(List<Certificate> certificates) {
         certificates.forEach(each -> addCertificate(each));
     }
 
-    public void addDepartments(List<Department> departments) {
+    private void addDepartments(List<Department> departments) {
         departments.forEach(each -> addDepartment(each));
     }
 
-    public void addSubjects(List<Subject> subjects) {
+    private void addSubjects(List<Subject> subjects) {
         subjects.forEach(each -> addSubject(each));
     }
 
-    public void addLanguageScores(List<LanguageScore> languageScores) {
+    private void addLanguageScores(List<LanguageScore> languageScores) {
         languageScores.forEach(each -> addLanguageScore(each));
     }
 
-    public void addNotes(List<String> notes) {
+    private void addNotes(List<String> notes) {
         notes.forEach(each -> addNote(each));
     }
 
     @Builder
-    public Announcement(
-        Company company,
-        Position position,
-        List<Certificate> certificates,
-        List<Department> departments,
-        List<Subject> subjects,
-        List<LanguageScore> languageScores,
-        String recruitType,
-        String recruitLevel,
-        String workingType,
-        LocalDateTime receiptTimestamp,
-        String sequence,
-        String link,
-        String rank,
-        String districtName,
-        int headCount,
-        List<String> notes
-    ) {
+    private Announcement(Company company, Position position, List<Certificate> certificates,
+                        List<Department> departments, List<Subject> subjects,
+                        List<LanguageScore> languageScores, String recruitType,
+                        String recruitLevel, String workingType, LocalDateTime receiptTimestamp,
+                        String sequence, String link, String rank, String districtName,
+                        int headCount, List<String> notes) {
         this.company = company;
         this.position = position;
         addCertificates(certificates);

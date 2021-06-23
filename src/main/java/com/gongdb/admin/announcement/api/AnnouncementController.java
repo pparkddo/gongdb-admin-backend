@@ -9,6 +9,7 @@ import com.gongdb.admin.announcement.dto.AnnouncementDto;
 import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
+import com.gongdb.admin.announcement.service.AnnouncementUpdateService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +32,7 @@ public class AnnouncementController {
 
     private final AnnouncementService announcementService;
     private final AnnouncementCreationService announcementCreationService;
+    private final AnnouncementUpdateService announcementUpdateService;
 
     @GetMapping
     public Page<AnnouncementDto> getAnnouncement(@PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
@@ -47,8 +50,17 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public Map<String, String> createAnnouncement(@Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
+    public Map<String, String> createAnnouncement(
+        @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
         announcementCreationService.create(announcementInputFormDto);
+        return Collections.singletonMap("response", "ok");
+    }
+
+    @PutMapping("/{id}")
+    public Map<String, String> updateAnnouncement(
+        @PathVariable Long id,
+        @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
+        announcementUpdateService.update(id, announcementInputFormDto);
         return Collections.singletonMap("response", "ok");
     }
 }
