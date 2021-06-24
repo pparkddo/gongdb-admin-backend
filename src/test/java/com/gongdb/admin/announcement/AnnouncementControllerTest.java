@@ -1,5 +1,6 @@
 package com.gongdb.admin.announcement;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -161,6 +162,34 @@ public class AnnouncementControllerTest {
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteAnnouncementTest() throws Exception {
+        AnnouncementInputFormDto announcementInputFormDto = 
+            AnnouncementInputFormDto.builder()
+                .certificates(List.of("certificate1", "certificates2"))
+                .companyName("companyName")
+                .departments(List.of("department1", "department2"))
+                .districtName("districtName")
+                .headCount(0)
+                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore1", "languageScore2")))
+                .link("link")
+                .notes(List.of("note1", "note2"))
+                .positionName("positionName")
+                .rank("rank")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
+                .recruitLevel("recruitLevel")
+                .recruitType("recruitType")
+                .sequence("sequence")
+                .subjects(List.of("subject1", "subject2"))
+                .workingType("workingType").build();
+        Announcement announcement = announcementCreationService.create(announcementInputFormDto);
+
+        this.mockMvc
+            .perform(delete(END_POINT + "/" + announcement.getId()))
             .andDo(print())
             .andExpect(status().isOk());
     }

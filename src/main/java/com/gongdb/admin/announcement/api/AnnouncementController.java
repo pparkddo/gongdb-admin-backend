@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,8 @@ public class AnnouncementController {
     private final AnnouncementUpdateService announcementUpdateService;
 
     @GetMapping
-    public Page<AnnouncementDto> getAnnouncement(@PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
+    public Page<AnnouncementDto> getAnnouncements(
+        @PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
         return announcementService.getAll(pageable);
     }
     
@@ -61,6 +63,12 @@ public class AnnouncementController {
         @PathVariable Long id,
         @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
         announcementUpdateService.update(id, announcementInputFormDto);
+        return Collections.singletonMap("response", "ok");
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<String, String> deleteAnnouncement(@PathVariable Long id) {
+        announcementService.delete(id);
         return Collections.singletonMap("response", "ok");
     }
 }

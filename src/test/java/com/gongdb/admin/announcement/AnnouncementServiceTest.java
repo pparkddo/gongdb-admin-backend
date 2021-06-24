@@ -166,6 +166,33 @@ public class AnnouncementServiceTest {
         assertEquals(announcement.getId(), announcementDto.getId());
     }
 
+    @Test
+    public void deleteAnnouncementTest() {
+        Announcement announcement = 
+            Announcement.builder()
+                .company(getOrCreateCompany("company"))
+                .position(getOrCreatePosition("position"))
+                .certificates(getOrCreateCertificates(List.of("certificate1", "certificate2")))
+                .departments(getOrCreateDepartments(List.of("department1", "department2")))
+                .subjects(getOrCreateSubjects(List.of("subject1", "subject2")))
+                .languageScores(getLanguageScores(getOrCreateLanguages(List.of("language1", "language2"))))
+                .recruitType("recruitType")
+                .recruitLevel("recruitLevel")
+                .workingType("workingType")
+                .receiptTimestamp(LocalDateTime.of(2021, 5, 20, 0, 0))
+                .sequence("sequence")
+                .link("link")
+                .rank("rank")
+                .districtName("districtName")
+                .headCount(0)
+                .notes(List.of("note1", "note2")).build();
+        announcementRepository.saveAndFlush(announcement);
+
+        assertEquals(1, announcementRepository.count());
+        announcementService.delete(announcement.getId());
+        assertEquals(0, announcementRepository.count());
+    }
+
     private Company getOrCreateCompany(String company) {
         return companyService.getOrCreate(company);
     }

@@ -13,23 +13,30 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class AnnouncementService {
     
     private final AnnouncementRepository announcementRepository;
 
+    @Transactional(readOnly = true)
     public Page<AnnouncementDto> getAll(Pageable pageable) {
         Page<Announcement> announcements = announcementRepository.findAll(pageable);
         return announcements.map(AnnouncementDto::of);
     }
 
+    @Transactional(readOnly = true)
     public AnnouncementDto get(Long id) {
         Announcement announcement = announcementRepository.findById(id).orElseThrow();
         return AnnouncementDto.of(announcement);
     }
 
+    @Transactional(readOnly = true)
     public AnnouncementDto getRecentAnnouncement() {
         Announcement announcement = announcementRepository.findFirstByOrderByIdDesc().orElseThrow();
         return AnnouncementDto.of(announcement);
+    }
+
+    public void delete(Long id) {
+        announcementRepository.deleteById(id);
     }
 }
