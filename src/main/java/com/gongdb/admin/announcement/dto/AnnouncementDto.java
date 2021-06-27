@@ -29,7 +29,7 @@ public class AnnouncementDto {
     private String recruitLevel;
     private String workingType;
     private String districtName;
-    private int headCount;
+    private String headCount;
     private LocalDateTime receiptTimestamp;
     private String sequence;
     private String link;
@@ -41,7 +41,7 @@ public class AnnouncementDto {
                             List<LanguageScore> languageScores, String recruitType,
                             String recruitLevel, String workingType, LocalDateTime receiptTimestamp,
                             String sequence, String link, String rank, String districtName,
-                            int headCount, List<String> notes) {
+                            String headCount, List<String> notes) {
         this.id = id;
         this.company = company;
         this.position = position;

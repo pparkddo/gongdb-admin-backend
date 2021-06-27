@@ -52,7 +52,7 @@ class AnnouncementRepositoryTest {
                             .link("link")
                             .rank("rank")
                             .districtName("district")
-                            .headCount(0)
+                            .headCount("0")
                             .notes(List.of("note1", "note2")).build();
         em.persistAndFlush(company);
         em.persistAndFlush(position);

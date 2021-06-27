@@ -67,7 +67,7 @@ public class Announcement {
     private String districtName;
 
     @NotNull
-    private int headCount;
+    private String headCount;
 
     private LocalDateTime receiptTimestamp;
     private String sequence;
@@ -98,7 +98,7 @@ public class Announcement {
         this.districtName = districtName;
     }
 
-    public void updateHeadCount(int headCount) {
+    public void updateHeadCount(String headCount) {
         this.headCount = headCount;
     }
 
@@ -219,7 +219,7 @@ public class Announcement {
                         List<LanguageScore> languageScores, String recruitType,
                         String recruitLevel, String workingType, LocalDateTime receiptTimestamp,
                         String sequence, String link, String rank, String districtName,
-                        int headCount, List<String> notes) {
+                        String headCount, List<String> notes) {
         this.company = company;
         this.position = position;
         addCertificates(certificates);

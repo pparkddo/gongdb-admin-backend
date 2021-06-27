@@ -79,7 +79,7 @@ public class AnnouncementServiceTest {
                 .link("link")
                 .rank("rank")
                 .districtName("districtName")
-                .headCount(0)
+                .headCount("0")
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement);
 
@@ -108,7 +108,7 @@ public class AnnouncementServiceTest {
                 .link("link")
                 .rank("rank")
                 .districtName("districtName")
-                .headCount(0)
+                .headCount("0")
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement1);
         Announcement announcement2 = 
@@ -127,7 +127,7 @@ public class AnnouncementServiceTest {
                 .link("link")
                 .rank("rank")
                 .districtName("districtName")
-                .headCount(0)
+                .headCount("0")
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement2);
 
@@ -158,7 +158,7 @@ public class AnnouncementServiceTest {
                 .link("link")
                 .rank("rank")
                 .districtName("districtName")
-                .headCount(0)
+                .headCount("0")
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement);
 
@@ -184,7 +184,7 @@ public class AnnouncementServiceTest {
                 .link("link")
                 .rank("rank")
                 .districtName("districtName")
-                .headCount(0)
+                .headCount("0")
                 .notes(List.of("note1", "note2")).build();
         announcementRepository.saveAndFlush(announcement);
 

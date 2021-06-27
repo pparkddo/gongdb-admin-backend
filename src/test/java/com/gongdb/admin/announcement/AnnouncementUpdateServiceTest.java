@@ -68,7 +68,7 @@ public class AnnouncementUpdateServiceTest {
                 .companyName("modifiedCompanyName")
                 .departments(List.of("modifiedDepartment1", "modifiedDepartment2"))
                 .districtName("modifiedDistrictName")
-                .headCount(99)
+                .headCount("99")
                 .languageScores(getLanguageScoreInputDtoList(
                         List.of("modifiedLanguageScore1", "modifiedLanguageScore2")))
                 .link("modifiedLink")
@@ -88,7 +88,7 @@ public class AnnouncementUpdateServiceTest {
         assertEquals(
             List.of("modifiedNote1", "modifiedNote2"), getCurrentAnnouncementNotes(announcement));
         assertEquals("modifiedCompanyName", announcement.getCompany().getName());
-        assertEquals(99, announcement.getHeadCount());
+        assertEquals("99", announcement.getHeadCount());
         assertEquals(LocalDateTime.of(2021, 5, 16, 0, 0), announcement.getReceiptTimestamp());
     }
 
@@ -129,7 +129,7 @@ public class AnnouncementUpdateServiceTest {
                             .link("link")
                             .rank("rank")
                             .districtName("district")
-                            .headCount(0)
+                            .headCount("0")
                             .notes(List.of("note1", "note2")).build();
         companyRepository.save(company);
         positionRepository.save(position);

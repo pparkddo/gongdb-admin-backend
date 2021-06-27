@@ -34,7 +34,7 @@ public class AnnouncementInputFormDto {
     private String districtName;
 
     @NotNull
-    private int headCount;
+    private String headCount;
 
     private List<String> certificates = new ArrayList<>();
     private List<String> departments = new ArrayList<>();
@@ -49,7 +49,7 @@ public class AnnouncementInputFormDto {
     @Builder
     private AnnouncementInputFormDto(String companyName, String positionName, String recruitType,
                                      String recruitLevel, String workingType, String districtName,
-                                     int headCount, List<String> certificates, List<String> departments,
+                                     String headCount, List<String> certificates, List<String> departments,
                                      List<String> subjects, List<LanguageScoreInputDto> languageScores,
                                      List<String> notes, LocalDateTime receiptTimestamp,
                                      String sequence, String link, String rank) {
