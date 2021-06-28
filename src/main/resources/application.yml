@@ -1,4 +1,12 @@
 spring:
+  profiles:
+    active: local
+
+---
+
+spring:
+  profiles: test
+
   jpa:
     properties:
       hibernate:
