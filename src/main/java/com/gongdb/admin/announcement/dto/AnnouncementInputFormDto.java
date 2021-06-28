@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -15,33 +17,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnnouncementInputFormDto {
     
-    @NotNull
-    private String companyName;
+    @NotEmpty private String companyName;
+    @NotEmpty private String positionName;
+    @NotEmpty private String recruitType;
+    @NotEmpty private String recruitLevel;
+    @NotEmpty private String workingType;
+    @NotEmpty private String districtName;
+    @NotEmpty private String headCount;
+    @NotNull private LocalDateTime receiptTimestamp;
 
-    @NotNull
-    private String positionName;
+    @Valid
+    private List<@NotEmpty String> certificates = new ArrayList<>();
 
-    @NotNull
-    private String recruitType;
+    @Valid
+    private List<@NotEmpty String> departments = new ArrayList<>();
 
-    @NotNull
-    private String recruitLevel;
+    @Valid
+    private List<@NotEmpty String> subjects = new ArrayList<>();
 
-    @NotNull
-    private String workingType;
+    @Valid
+    private List<@Valid LanguageScoreInputDto> languageScores = new ArrayList<>();
+ 
+    @Valid
+    private List<@NotEmpty String> notes = new ArrayList<>();
 
-    @NotNull
-    private String districtName;
-
-    @NotNull
-    private String headCount;
-
-    private List<String> certificates = new ArrayList<>();
-    private List<String> departments = new ArrayList<>();
-    private List<String> subjects = new ArrayList<>();
-    private List<LanguageScoreInputDto> languageScores = new ArrayList<>();
-    private List<String> notes = new ArrayList<>();
-    private LocalDateTime receiptTimestamp;
     private String sequence;
     private String link;
     private String rank;
