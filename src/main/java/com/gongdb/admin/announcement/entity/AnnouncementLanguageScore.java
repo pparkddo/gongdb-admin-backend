@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 
@@ -24,9 +23,8 @@ public class AnnouncementLanguageScore {
     @GeneratedValue
     private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "announcement_id")
+    @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
 
     @Embedded

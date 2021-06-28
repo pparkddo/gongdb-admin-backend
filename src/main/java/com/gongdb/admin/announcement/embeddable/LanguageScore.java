@@ -1,9 +1,9 @@
 package com.gongdb.admin.announcement.embeddable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import com.gongdb.admin.announcement.entity.Language;
 
@@ -17,12 +17,11 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class LanguageScore {
     
-    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "language_id")
+    @JoinColumn(name = "language_id", nullable = false)
     private Language language;
 
-    @NotNull
+    @Column(nullable = false)
     private String score;
 
     private String perfectScore;

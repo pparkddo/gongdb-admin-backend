@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 
@@ -29,14 +29,12 @@ public class Announcement {
     @GeneratedValue
     private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Company company;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Position position;
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -54,22 +52,24 @@ public class Announcement {
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementNote> announcementNotes = new ArrayList<>();
 
-    @NotNull
+    @Column(nullable = false)
     private String recruitType;
 
-    @NotNull
+    @Column(nullable = false)
     private String recruitLevel;
 
-    @NotNull
+    @Column(nullable = false)
     private String workingType;
 
-    @NotNull
+    @Column(nullable = false)
     private String districtName;
 
-    @NotNull
+    @Column(nullable = false)
     private String headCount;
 
+    @Column(nullable = false)
     private LocalDateTime receiptTimestamp;
+
     private String sequence;
     private String link;
     private String rank;

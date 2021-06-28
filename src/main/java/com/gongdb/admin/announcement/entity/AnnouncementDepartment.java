@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,14 +20,12 @@ public class AnnouncementDepartment {
     @GeneratedValue
     private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "announcement_id")
+    @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @Builder

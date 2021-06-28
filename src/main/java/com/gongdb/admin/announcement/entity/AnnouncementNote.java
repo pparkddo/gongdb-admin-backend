@@ -1,11 +1,11 @@
 package com.gongdb.admin.announcement.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,12 +21,11 @@ public class AnnouncementNote {
     @GeneratedValue
     private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "announcement_id")
+    @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
 
-    @NotNull
+    @Column(nullable = false)
     private String note;
 
     @Builder
