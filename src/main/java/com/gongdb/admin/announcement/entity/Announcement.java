@@ -72,6 +72,8 @@ public class Announcement {
 
     private String sequence;
     private String link;
+
+    @Column(name = "rank_")
     private String rank;
 
     public void updateCompany(Company company) {
