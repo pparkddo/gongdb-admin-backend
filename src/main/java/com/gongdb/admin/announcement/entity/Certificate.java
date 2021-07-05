@@ -26,4 +26,8 @@ public class Certificate {
     public Certificate(String name) {
         this.name = name;
     }
+
+    public void rename(String name) {
+        this.name = name;
+    }
 }

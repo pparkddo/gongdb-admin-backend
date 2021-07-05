@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.CertificateDto;
+import com.gongdb.admin.announcement.dto.CertificateUpdateDto;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.repository.CertificateRepository;
 
@@ -31,5 +32,11 @@ public class CertificateService {
 
     public List<CertificateDto> getAll() {
         return certificateRepository.findAll().stream().map(CertificateDto::of).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void update(Long id, CertificateUpdateDto dto) {
+        Certificate certificate = certificateRepository.findById(id).orElseThrow();
+        certificate.rename(dto.getName());
     }
 }

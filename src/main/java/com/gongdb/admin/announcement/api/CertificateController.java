@@ -1,11 +1,19 @@
 package com.gongdb.admin.announcement.api;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import com.gongdb.admin.announcement.dto.CertificateDto;
+import com.gongdb.admin.announcement.dto.CertificateUpdateDto;
 import com.gongdb.admin.announcement.service.CertificateService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +29,13 @@ public class CertificateController {
     @GetMapping
     public List<CertificateDto> getCertificates() {
         return certificateService.getAll();
+    }
+
+    @PutMapping("/{id}")
+    public Map<String, String> updateCertificate(
+        @PathVariable Long id,
+        @Valid @RequestBody CertificateUpdateDto certificateUpdateDto) {
+        certificateService.update(id, certificateUpdateDto);
+        return Collections.singletonMap("response", "ok");
     }
 }
