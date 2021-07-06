@@ -1,4 +1,4 @@
-package com.gongdb.admin.error;
+package com.gongdb.admin.global.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

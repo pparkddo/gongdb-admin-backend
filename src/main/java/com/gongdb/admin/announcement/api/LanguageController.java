@@ -1,12 +1,10 @@
 package com.gongdb.admin.announcement.api;
 
-import java.util.Collections;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.gongdb.admin.announcement.dto.LanguageUpdateDto;
 import com.gongdb.admin.announcement.service.LanguageService;
+import com.gongdb.admin.global.dto.SimpleMessageResponse;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,9 +22,9 @@ public class LanguageController {
     private final LanguageService languageService;
     
     @PutMapping("/{id}")
-    public Map<String, String> updateLanguage(
+    public SimpleMessageResponse updateLanguage(
             @PathVariable Long id, @Valid @RequestBody LanguageUpdateDto languageUpdateDto) {
         languageService.update(id, languageUpdateDto);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 수정되었습니다");
     }
 }

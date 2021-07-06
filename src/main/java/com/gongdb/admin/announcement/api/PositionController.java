@@ -1,12 +1,10 @@
 package com.gongdb.admin.announcement.api;
 
-import java.util.Collections;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.gongdb.admin.announcement.dto.PositionUpdateDto;
 import com.gongdb.admin.announcement.service.PositionService;
+import com.gongdb.admin.global.dto.SimpleMessageResponse;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,9 +22,9 @@ public class PositionController {
     private final PositionService positionService;
     
     @PutMapping("/{id}")
-    public Map<String, String> updatePosition(
+    public SimpleMessageResponse updatePosition(
             @PathVariable Long id, @Valid @RequestBody PositionUpdateDto positionUpdateDto) {
         positionService.update(id, positionUpdateDto);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 수정되었습니다");
     }
 }

@@ -1,4 +1,4 @@
-package com.gongdb.admin.error;
+package com.gongdb.admin.global.error;
 
 import java.time.LocalDateTime;
 import java.util.List;

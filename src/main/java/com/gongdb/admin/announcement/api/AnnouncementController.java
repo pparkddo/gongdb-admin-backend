@@ -1,8 +1,5 @@
 package com.gongdb.admin.announcement.api;
 
-import java.util.Collections;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.gongdb.admin.announcement.dto.AnnouncementDto;
@@ -10,6 +7,7 @@ import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
 import com.gongdb.admin.announcement.service.AnnouncementUpdateService;
+import com.gongdb.admin.global.dto.SimpleMessageResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +35,7 @@ public class AnnouncementController {
 
     @GetMapping
     public Page<AnnouncementDto> getAnnouncements(
-        @PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
+            @PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
         return announcementService.getAll(pageable);
     }
     
@@ -52,23 +50,23 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public Map<String, String> createAnnouncement(
-        @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
+    public SimpleMessageResponse createAnnouncement(
+            @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
         announcementCreationService.create(announcementInputFormDto);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 생성되었습니다");
     }
 
     @PutMapping("/{id}")
-    public Map<String, String> updateAnnouncement(
-        @PathVariable Long id,
-        @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
+    public SimpleMessageResponse updateAnnouncement(
+            @PathVariable Long id,
+            @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
         announcementUpdateService.update(id, announcementInputFormDto);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 수정되었습니다");
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, String> deleteAnnouncement(@PathVariable Long id) {
+    public SimpleMessageResponse deleteAnnouncement(@PathVariable Long id) {
         announcementService.delete(id);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 삭제되었습니다");
     }
 }

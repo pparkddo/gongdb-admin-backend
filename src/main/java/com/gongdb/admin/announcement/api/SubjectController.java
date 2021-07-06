@@ -1,12 +1,10 @@
 package com.gongdb.admin.announcement.api;
 
-import java.util.Collections;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.gongdb.admin.announcement.dto.SubjectUpdateDto;
 import com.gongdb.admin.announcement.service.SubjectService;
+import com.gongdb.admin.global.dto.SimpleMessageResponse;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,9 +22,9 @@ public class SubjectController {
     private final SubjectService subjectService;
     
     @PutMapping("/{id}")
-    public Map<String, String> updateSubject(
+    public SimpleMessageResponse updateSubject(
             @PathVariable Long id, @Valid @RequestBody SubjectUpdateDto subjectUpdateDto) {
         subjectService.update(id, subjectUpdateDto);
-        return Collections.singletonMap("response", "ok");
+        return SimpleMessageResponse.of("정상적으로 수정되었습니다");
     }
 }
