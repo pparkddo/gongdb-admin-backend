@@ -34,6 +34,7 @@ public class AnnouncementDto {
     private String sequence;
     private String link;
     private String rank;
+    private LocalDateTime createdTimestamp;
 
     @Builder
     private AnnouncementDto(Long id, Company company, Position position, List<String> certificates,
@@ -41,7 +42,7 @@ public class AnnouncementDto {
                             List<LanguageScore> languageScores, String recruitType,
                             String recruitLevel, String workingType, LocalDateTime receiptTimestamp,
                             String sequence, String link, String rank, String districtName,
-                            String headCount, List<String> notes) {
+                            String headCount, List<String> notes, LocalDateTime createdTimestamp) {
         this.id = id;
         this.company = company;
         this.position = position;
@@ -59,6 +60,7 @@ public class AnnouncementDto {
         this.sequence = sequence;
         this.link = link;
         this.rank = rank;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public static AnnouncementDto of(Announcement announcement) {
@@ -100,6 +102,7 @@ public class AnnouncementDto {
                 .sequence(announcement.getSequence())
                 .link(announcement.getLink())
                 .rank(announcement.getRank())
+                .createdTimestamp(announcement.getCreatedTimestamp())
                 .build();
     }
 

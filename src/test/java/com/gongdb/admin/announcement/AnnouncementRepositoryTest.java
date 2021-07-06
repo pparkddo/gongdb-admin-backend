@@ -1,6 +1,7 @@
 package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -143,6 +144,13 @@ class AnnouncementRepositoryTest {
              .map(each -> each.getCertificate().getName())
              .collect(Collectors.toList()));
         assertEquals(1, count);
+    }
+
+    @Test
+    public void createdDateTest() {
+        Announcement a = em.find(Announcement.class, announcement.getId());
+
+        assertTrue(a.getCreatedTimestamp().isBefore(LocalDateTime.now()));
     }
 
     private Company getCompany(String company) {

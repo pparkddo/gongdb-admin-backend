@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
+import com.gongdb.admin.global.entity.BaseCreateAuditEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class AnnouncementLanguageScore {
+public class AnnouncementLanguageScore extends BaseCreateAuditEntity {
     
     @Id
     @GeneratedValue
