@@ -22,6 +22,10 @@ public class Subject {
     @Column(unique = true, nullable = false)
     private String name;
 
+    public void rename(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Subject(String name) {
         this.name = name;

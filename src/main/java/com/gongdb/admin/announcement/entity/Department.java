@@ -22,6 +22,10 @@ public class Department {
     @Column(unique = true, nullable = false)
     private String name;
 
+    public void rename(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Department(String name) {
         this.name = name;

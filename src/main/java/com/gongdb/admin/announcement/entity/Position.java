@@ -22,6 +22,10 @@ public class Position {
     @Column(unique = true, nullable = false)
     private String name;
 
+    public void rename(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Position(String name) {
         this.name = name;

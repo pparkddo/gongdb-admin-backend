@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CertificateService {
     
     private final CertificateRepository certificateRepository;
 
-    @Transactional
     public Certificate getOrCreate(String name) {
         return certificateRepository
                     .findByName(name)
@@ -30,11 +30,11 @@ public class CertificateService {
         return certificateRepository.save(certificate);
     }
 
+    @Transactional(readOnly = true)
     public List<CertificateDto> getAll() {
         return certificateRepository.findAll().stream().map(CertificateDto::of).collect(Collectors.toList());
     }
 
-    @Transactional
     public void update(Long id, CertificateUpdateDto dto) {
         Certificate certificate = certificateRepository.findById(id).orElseThrow();
         certificate.rename(dto.getName());

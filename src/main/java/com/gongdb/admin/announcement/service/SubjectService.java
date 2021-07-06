@@ -1,5 +1,6 @@
 package com.gongdb.admin.announcement.service;
 
+import com.gongdb.admin.announcement.dto.SubjectUpdateDto;
 import com.gongdb.admin.announcement.entity.Subject;
 import com.gongdb.admin.announcement.repository.SubjectRepository;
 
@@ -9,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SubjectService {
     
     private final SubjectRepository subjectRepository;
 
-    @Transactional
     public Subject getOrCreate(String name) {
         return subjectRepository 
                     .findByName(name)
@@ -23,5 +24,10 @@ public class SubjectService {
 
     public Subject create(Subject subject) {
         return subjectRepository.save(subject);
+    }
+
+    public void update(Long id, SubjectUpdateDto dto) {
+        Subject subject = subjectRepository.findById(id).orElseThrow();
+        subject.rename(dto.getName());
     }
 }

@@ -22,6 +22,10 @@ public class Language {
     @Column(unique = true, nullable = false)
     private String name;
 
+    public void rename(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Language(String name) {
         this.name = name;

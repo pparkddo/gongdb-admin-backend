@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.DepartmentDto;
+import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.repository.DepartmentRepository;
 
@@ -13,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DepartmentService {
     
     private final DepartmentRepository departmentRepository;
 
-    @Transactional
     public Department getOrCreate(String name) {
         return departmentRepository
                     .findByName(name)
@@ -29,7 +30,13 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
+    @Transactional(readOnly = true)
     public List<DepartmentDto> getAll() {
         return departmentRepository.findAll().stream().map(DepartmentDto::of).collect(Collectors.toList());
+    }
+
+    public void update(Long id, DepartmentUpdateDto dto) {
+        Department department = departmentRepository.findById(id).orElseThrow();
+        department.rename(dto.getName());
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.DepartmentDto;
+import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.repository.DepartmentRepository;
 import com.gongdb.admin.announcement.service.DepartmentService;
@@ -15,9 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Transactional
 public class DepartmentServiceTest {
     
     @Autowired
@@ -50,5 +53,19 @@ public class DepartmentServiceTest {
         List<DepartmentDto> departments = departmentService.getAll();
         assertEquals(departments.size(), 2);
         assertTrue(departments.stream().map(each -> each.getName()).collect(Collectors.toList()).contains("name1"));
+    }
+
+    @Test
+    public void updateTest() {
+        String beforeUpdateName = "beforeUpdate";
+        Department department
+            = departmentService.create(Department.builder().name(beforeUpdateName).build());
+
+        String afterUpdateName = "renamed";
+        DepartmentUpdateDto dto = DepartmentUpdateDto.builder().name(afterUpdateName).build();
+        departmentService.update(department.getId(), dto);
+        departmentRepository.flush();
+        
+        assertEquals(afterUpdateName, department.getName());
     }
 }

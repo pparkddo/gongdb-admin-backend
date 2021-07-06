@@ -2,6 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.gongdb.admin.announcement.dto.CompanyUpdateDto;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.repository.CompanyRepository;
 import com.gongdb.admin.announcement.service.CompanyService;
@@ -10,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Transactional
 public class CompanyServiceTest {
     
     @Autowired
@@ -36,5 +39,19 @@ public class CompanyServiceTest {
         companyService.getOrCreate(alreadyExistsName);
         companyService.getOrCreate(newName);
         assertEquals(companyRepository.count(), 2);
+    }
+
+    @Test
+    public void updateTest() {
+        String beforeUpdateName = "beforeUpdate";
+        Company company
+            = companyService.create(Company.builder().name(beforeUpdateName).build());
+
+        String afterUpdateName = "renamed";
+        CompanyUpdateDto dto = CompanyUpdateDto.builder().name(afterUpdateName).build();
+        companyService.update(company.getId(), dto);
+        companyRepository.flush();
+        
+        assertEquals(afterUpdateName, company.getName());
     }
 }

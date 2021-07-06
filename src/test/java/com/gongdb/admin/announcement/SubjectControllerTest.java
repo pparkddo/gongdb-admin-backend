@@ -1,20 +1,15 @@
 package com.gongdb.admin.announcement;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
-import com.gongdb.admin.announcement.entity.Department;
-import com.gongdb.admin.announcement.service.DepartmentService;
+import com.gongdb.admin.announcement.dto.SubjectUpdateDto;
+import com.gongdb.admin.announcement.entity.Subject;
+import com.gongdb.admin.announcement.service.SubjectService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,48 +24,29 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class DepartmentControllerTest {
+public class SubjectControllerTest {
     
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private DepartmentService departmentService;
+    private SubjectService subjectService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String END_POINT = "/api/department";
+    private static final String END_POINT = "/api/subject";
 
     @Test
-    public void getEmptyDepartmentsTest() throws Exception {
-        this.mockMvc
-            .perform(get(END_POINT))
-            .andDo(print())
-            .andExpect(status().isOk());
-    }
+    public void updateSubjectTest() throws Exception {
+        Subject subject = subjectService.getOrCreate("name");
 
-    @Test
-    public void getCertificatesTest() throws Exception {
-        List.of("name1", "name2").stream().forEach(departmentService::getOrCreate);
-
-        this.mockMvc
-            .perform(get(END_POINT))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(2)));
-    }
-
-    @Test
-    public void updateDepartmentTest() throws Exception {
-        Department department = departmentService.getOrCreate("name");
-
-        DepartmentUpdateDto dto = DepartmentUpdateDto.builder().name("renamed").build();
+        SubjectUpdateDto dto = SubjectUpdateDto.builder().name("renamed").build();
         String content = convertToNonNullValueJsonString(dto);
 
         this.mockMvc
             .perform(
-                put(END_POINT + "/" + department.getId())
+                put(END_POINT + "/" + subject.getId())
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             ) 

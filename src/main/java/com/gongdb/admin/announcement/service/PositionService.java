@@ -1,5 +1,6 @@
 package com.gongdb.admin.announcement.service;
 
+import com.gongdb.admin.announcement.dto.PositionUpdateDto;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.repository.PositionRepository;
 
@@ -9,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PositionService {
     
     private final PositionRepository positionRepository;
 
-    @Transactional
     public Position getOrCreate(String name) {
         return positionRepository 
                     .findByName(name)
@@ -23,5 +24,10 @@ public class PositionService {
 
     public Position create(Position position) {
         return positionRepository.save(position);
+    }
+
+    public void update(Long id, PositionUpdateDto dto) {
+        Position position = positionRepository.findById(id).orElseThrow();
+        position.rename(dto.getName());
     }
 }
