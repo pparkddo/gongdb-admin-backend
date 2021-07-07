@@ -8,6 +8,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.gongdb.admin.global.validation.UniqueLanguageScoreInput;
+import com.gongdb.admin.global.validation.UniqueValue;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,18 +30,23 @@ public class AnnouncementInputFormDto {
     @NotNull private LocalDateTime receiptTimestamp;
 
     @Valid
+    @UniqueValue
     private List<@NotEmpty String> certificates = new ArrayList<>();
 
     @Valid
+    @UniqueValue
     private List<@NotEmpty String> departments = new ArrayList<>();
 
     @Valid
+    @UniqueValue
     private List<@NotEmpty String> subjects = new ArrayList<>();
 
     @Valid
+    @UniqueLanguageScoreInput
     private List<@Valid LanguageScoreInputDto> languageScores = new ArrayList<>();
  
     @Valid
+    @UniqueValue
     private List<@NotEmpty String> notes = new ArrayList<>();
 
     private String sequence;
