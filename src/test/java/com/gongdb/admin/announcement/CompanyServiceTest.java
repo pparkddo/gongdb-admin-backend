@@ -2,7 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.gongdb.admin.announcement.dto.CompanyUpdateDto;
+import com.gongdb.admin.announcement.dto.request.CompanyUpdateDto;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.repository.CompanyRepository;
 import com.gongdb.admin.announcement.service.CompanyService;

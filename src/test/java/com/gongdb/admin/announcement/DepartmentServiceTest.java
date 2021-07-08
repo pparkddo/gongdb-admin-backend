@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.gongdb.admin.announcement.dto.DepartmentDto;
-import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.request.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.response.DepartmentDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.repository.DepartmentRepository;
 import com.gongdb.admin.announcement.service.DepartmentService;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.gongdb.admin.announcement.dto.CertificateDto;
-import com.gongdb.admin.announcement.dto.CertificateUpdateDto;
+import com.gongdb.admin.announcement.dto.request.CertificateUpdateDto;
+import com.gongdb.admin.announcement.dto.response.CertificateDto;
 import com.gongdb.admin.announcement.service.CertificateService;
 import com.gongdb.admin.global.dto.SimpleMessageResponse;
 

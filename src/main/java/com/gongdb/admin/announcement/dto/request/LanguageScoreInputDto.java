@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.dto;
+package com.gongdb.admin.announcement.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 

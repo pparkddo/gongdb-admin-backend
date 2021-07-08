@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gongdb.admin.announcement.dto.PositionUpdateDto;
+import com.gongdb.admin.announcement.dto.request.PositionUpdateDto;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.service.PositionService;
 

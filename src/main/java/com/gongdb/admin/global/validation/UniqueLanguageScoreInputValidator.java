@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.gongdb.admin.announcement.dto.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 
 public class UniqueLanguageScoreInputValidator
     implements ConstraintValidator<UniqueLanguageScoreInput, List<LanguageScoreInputDto>> {

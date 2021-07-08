@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.dto;
+package com.gongdb.admin.announcement.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CertificateUpdateDto {
+public class SubjectUpdateDto {
     
     @NotEmpty
     private String name;
 
     @Builder
-    private CertificateUpdateDto(String name) {
+    private SubjectUpdateDto(String name) {
         this.name = name;
     }
 }

@@ -2,8 +2,8 @@ package com.gongdb.admin.announcement.api;
 
 import javax.validation.Valid;
 
-import com.gongdb.admin.announcement.dto.AnnouncementDto;
-import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.response.AnnouncementDto;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
 import com.gongdb.admin.announcement.service.AnnouncementUpdateService;

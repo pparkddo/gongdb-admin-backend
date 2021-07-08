@@ -2,7 +2,7 @@ package com.gongdb.admin.announcement.api;
 
 import javax.validation.Valid;
 
-import com.gongdb.admin.announcement.dto.LanguageUpdateDto;
+import com.gongdb.admin.announcement.dto.request.LanguageUpdateDto;
 import com.gongdb.admin.announcement.service.LanguageService;
 import com.gongdb.admin.global.dto.SimpleMessageResponse;
 

@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gongdb.admin.announcement.dto.SubjectUpdateDto;
+import com.gongdb.admin.announcement.dto.request.SubjectUpdateDto;
 import com.gongdb.admin.announcement.entity.Subject;
 import com.gongdb.admin.announcement.service.SubjectService;
 

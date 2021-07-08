@@ -1,6 +1,6 @@
 package com.gongdb.admin.announcement.service;
 
-import com.gongdb.admin.announcement.dto.LanguageUpdateDto;
+import com.gongdb.admin.announcement.dto.request.LanguageUpdateDto;
 import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.repository.LanguageRepository;
 

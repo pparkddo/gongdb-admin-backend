@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.gongdb.admin.announcement.dto.DepartmentDto;
-import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.request.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.response.DepartmentDto;
 import com.gongdb.admin.announcement.service.DepartmentService;
 import com.gongdb.admin.global.dto.SimpleMessageResponse;
 

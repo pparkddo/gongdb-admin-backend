@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.dto;
+package com.gongdb.admin.announcement.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

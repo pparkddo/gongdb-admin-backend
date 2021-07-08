@@ -2,7 +2,7 @@ package com.gongdb.admin.announcement.api;
 
 import javax.validation.Valid;
 
-import com.gongdb.admin.announcement.dto.PositionUpdateDto;
+import com.gongdb.admin.announcement.dto.request.PositionUpdateDto;
 import com.gongdb.admin.announcement.service.PositionService;
 import com.gongdb.admin.global.dto.SimpleMessageResponse;
 

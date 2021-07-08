@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.dto;
+package com.gongdb.admin.announcement.dto.response;
 
 import com.gongdb.admin.announcement.entity.Certificate;
 

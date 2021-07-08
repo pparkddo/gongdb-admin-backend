@@ -3,8 +3,8 @@ package com.gongdb.admin.announcement.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.gongdb.admin.announcement.dto.DepartmentDto;
-import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.request.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.response.DepartmentDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.repository.DepartmentRepository;
 

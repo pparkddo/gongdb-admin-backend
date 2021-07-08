@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
-import com.gongdb.admin.announcement.dto.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 

@@ -1,4 +1,4 @@
-package com.gongdb.admin.announcement.dto;
+package com.gongdb.admin.announcement.dto.request;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class AnnouncementInputFormDto {
 
     @Valid
     @UniqueLanguageScoreInput
-    private List<@Valid LanguageScoreInputDto> languageScores = new ArrayList<>();
+    private List<com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto> languageScores = new ArrayList<>();
  
     @Valid
     @UniqueValue

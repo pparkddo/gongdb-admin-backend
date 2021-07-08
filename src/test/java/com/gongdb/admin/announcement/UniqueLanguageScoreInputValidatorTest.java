@@ -10,7 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import com.gongdb.admin.announcement.dto.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.global.validation.UniqueLanguageScoreInput;
 
 import org.junit.jupiter.api.Test;

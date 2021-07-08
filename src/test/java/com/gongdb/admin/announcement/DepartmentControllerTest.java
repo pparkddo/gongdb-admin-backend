@@ -12,7 +12,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gongdb.admin.announcement.dto.DepartmentUpdateDto;
+import com.gongdb.admin.announcement.dto.request.DepartmentUpdateDto;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.service.DepartmentService;
 

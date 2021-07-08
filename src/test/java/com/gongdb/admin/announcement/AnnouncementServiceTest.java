@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import com.gongdb.admin.announcement.dto.AnnouncementDto;
+import com.gongdb.admin.announcement.dto.response.AnnouncementDto;
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.entity.Certificate;

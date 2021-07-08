@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.gongdb.admin.announcement.dto.AnnouncementInputFormDto;
-import com.gongdb.admin.announcement.dto.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
 

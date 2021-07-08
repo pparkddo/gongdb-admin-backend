@@ -1,6 +1,6 @@
 package com.gongdb.admin.announcement.service;
 
-import com.gongdb.admin.announcement.dto.PositionUpdateDto;
+import com.gongdb.admin.announcement.dto.request.PositionUpdateDto;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.repository.PositionRepository;
 

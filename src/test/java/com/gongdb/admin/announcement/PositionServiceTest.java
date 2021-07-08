@@ -2,7 +2,7 @@ package com.gongdb.admin.announcement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.gongdb.admin.announcement.dto.PositionUpdateDto;
+import com.gongdb.admin.announcement.dto.request.PositionUpdateDto;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.repository.PositionRepository;
 import com.gongdb.admin.announcement.service.PositionService;
