@@ -1,5 +1,7 @@
 package com.gongdb.admin.announcement.service;
 
+import java.util.List;
+
 import com.gongdb.admin.announcement.dto.request.CompanyUpdateDto;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.repository.CompanyRepository;
@@ -29,5 +31,10 @@ public class CompanyService {
     public void update(Long id, CompanyUpdateDto dto) {
         Company company = companyRepository.findById(id).orElseThrow();
         company.rename(dto.getName());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Company> search(String name) {
+        return companyRepository.findByNameContaining(name);
     }
 }

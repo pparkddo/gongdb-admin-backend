@@ -39,4 +39,9 @@ public class DepartmentService {
         Department department = departmentRepository.findById(id).orElseThrow();
         department.rename(dto.getName());
     }
+
+    @Transactional(readOnly = true)
+    public List<Department> search(String name) {
+        return departmentRepository.findByNameContaining(name);
+    }
 }

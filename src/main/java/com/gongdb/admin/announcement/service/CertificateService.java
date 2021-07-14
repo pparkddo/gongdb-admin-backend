@@ -39,4 +39,8 @@ public class CertificateService {
         Certificate certificate = certificateRepository.findById(id).orElseThrow();
         certificate.rename(dto.getName());
     }
+
+    public List<Certificate> search(String name) {
+        return certificateRepository.findByNameContaining(name);
+    }
 }

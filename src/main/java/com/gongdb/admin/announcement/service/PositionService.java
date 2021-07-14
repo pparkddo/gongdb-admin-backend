@@ -1,5 +1,7 @@
 package com.gongdb.admin.announcement.service;
 
+import java.util.List;
+
 import com.gongdb.admin.announcement.dto.request.PositionUpdateDto;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.repository.PositionRepository;
@@ -29,5 +31,10 @@ public class PositionService {
     public void update(Long id, PositionUpdateDto dto) {
         Position position = positionRepository.findById(id).orElseThrow();
         position.rename(dto.getName());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Position> search(String name) {
+        return positionRepository.findByNameContaining(name);
     }
 }

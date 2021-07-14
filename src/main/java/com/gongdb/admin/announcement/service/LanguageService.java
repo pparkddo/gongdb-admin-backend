@@ -1,5 +1,7 @@
 package com.gongdb.admin.announcement.service;
 
+import java.util.List;
+
 import com.gongdb.admin.announcement.dto.request.LanguageUpdateDto;
 import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.repository.LanguageRepository;
@@ -29,5 +31,10 @@ public class LanguageService {
     public void update(Long id, LanguageUpdateDto dto) {
         Language language = languageRepository.findById(id).orElseThrow();
         language.rename(dto.getName());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Language> search(String name) {
+        return languageRepository.findByNameContaining(name);
     }
 }
