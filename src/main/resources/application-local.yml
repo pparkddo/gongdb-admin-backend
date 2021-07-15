@@ -6,8 +6,6 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
         ddl-auto: validate
   
   datasource:
