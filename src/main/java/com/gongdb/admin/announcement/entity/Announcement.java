@@ -1,6 +1,5 @@
 package com.gongdb.admin.announcement.entity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +31,11 @@ public class Announcement extends BaseCreateAuditEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Company company;
+    private Position position;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Position position;
+    private AnnouncementSequence announcementSequence;
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AnnouncementCertificate> announcementCertificates = new ArrayList<>();
@@ -68,21 +67,15 @@ public class Announcement extends BaseCreateAuditEntity {
     @Column(nullable = false)
     private String headCount;
 
-    @Column(nullable = false)
-    private LocalDateTime receiptTimestamp;
-
-    private String sequence;
-    private String link;
-
     @Column(name = "rank_")
     private String rank;
 
-    public void updateCompany(Company company) {
-        this.company = company;
-    }
-
     public void updatePosition(Position position) {
         this.position = position;
+    }
+
+    public void updateAnnouncementSequence(AnnouncementSequence announcementSequence) {
+        this.announcementSequence = announcementSequence;
     }
 
     public void updateRecruitType(String recruitType) {
@@ -103,18 +96,6 @@ public class Announcement extends BaseCreateAuditEntity {
 
     public void updateHeadCount(String headCount) {
         this.headCount = headCount;
-    }
-
-    public void updateReceiptTimestamp(LocalDateTime receiptDateTime) {
-        this.receiptTimestamp = receiptDateTime;
-    }
-
-    public void updateSequence(String sequence) {
-        this.sequence = sequence;
-    }
-
-    public void updateLink(String link) {
-        this.link = link;
     }
 
     public void updateRank(String rank) {
@@ -217,14 +198,13 @@ public class Announcement extends BaseCreateAuditEntity {
     }
 
     @Builder
-    private Announcement(Company company, Position position, List<Certificate> certificates,
-                        List<Department> departments, List<Subject> subjects,
-                        List<LanguageScore> languageScores, String recruitType,
-                        String recruitLevel, String workingType, LocalDateTime receiptTimestamp,
-                        String sequence, String link, String rank, String districtName,
-                        String headCount, List<String> notes) {
-        this.company = company;
+    private Announcement(Position position, AnnouncementSequence announcementSequence,
+            List<Certificate> certificates, List<Department> departments, List<Subject> subjects,
+            List<LanguageScore> languageScores, String recruitType, String recruitLevel,
+            String workingType, String rank, String districtName, String headCount,
+            List<String> notes) {
         this.position = position;
+        this.announcementSequence = announcementSequence;
         addCertificates(certificates);
         addDepartments(departments);
         addSubjects(subjects);
@@ -232,9 +212,6 @@ public class Announcement extends BaseCreateAuditEntity {
         this.recruitType = recruitType;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;
-        this.receiptTimestamp = receiptTimestamp;
-        this.sequence = sequence;
-        this.link = link;
         this.rank = rank;
         this.districtName = districtName;
         this.headCount = headCount;

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
+import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Department;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AnnouncementCreationService {
     
@@ -29,34 +32,30 @@ public class AnnouncementCreationService {
     private final LanguageService languageService;
     private final PositionService positionService;
     private final SubjectService subjectService;
+    private final AnnouncementSequenceService announcementSequenceService;
 
-    @Transactional
     public Announcement create(AnnouncementInputFormDto announcementInputFormDto) {
         List<Certificate> certificates = getOrCreateCertificates(announcementInputFormDto);
-        Company company = companyService.getOrCreate(announcementInputFormDto.getCompanyName());
         List<Department> departments = getOrCreateDepartments(announcementInputFormDto);
         List<LanguageScore> languageScores = getOrCreateLanguageScores(announcementInputFormDto);
         Position position = positionService.getOrCreate(announcementInputFormDto.getPositionName());
         List<Subject> subjects = getOrCreateSubjects(announcementInputFormDto);
-        Announcement announcement = 
-            Announcement.builder()
-                        .certificates(certificates)
-                        .company(company)
-                        .departments(departments)
-                        .districtName(announcementInputFormDto.getDistrictName())
-                        .headCount(announcementInputFormDto.getHeadCount())
-                        .languageScores(languageScores)
-                        .link(announcementInputFormDto.getLink())
-                        .notes(announcementInputFormDto.getNotes())
-                        .position(position)
-                        .rank(announcementInputFormDto.getRank())
-                        .receiptTimestamp(announcementInputFormDto.getReceiptTimestamp())
-                        .recruitLevel(announcementInputFormDto.getRecruitLevel())
-                        .recruitType(announcementInputFormDto.getRecruitType())
-                        .sequence(announcementInputFormDto.getSequence())
-                        .subjects(subjects)
-                        .workingType(announcementInputFormDto.getWorkingType())
-                        .build();
+        AnnouncementSequence announcementSequence = getOrCreateSequence(announcementInputFormDto);
+        Announcement announcement = Announcement.builder()
+            .certificates(certificates)
+            .announcementSequence(announcementSequence)
+            .departments(departments)
+            .districtName(announcementInputFormDto.getDistrictName())
+            .headCount(announcementInputFormDto.getHeadCount())
+            .languageScores(languageScores)
+            .notes(announcementInputFormDto.getNotes())
+            .position(position)
+            .rank(announcementInputFormDto.getRank())
+            .recruitLevel(announcementInputFormDto.getRecruitLevel())
+            .recruitType(announcementInputFormDto.getRecruitType())
+            .subjects(subjects)
+            .workingType(announcementInputFormDto.getWorkingType())
+            .build();
         return announcementRepository.save(announcement);
     }
 
@@ -80,12 +79,11 @@ public class AnnouncementCreationService {
         return announcementInputFormDto
             .getLanguageScores()
             .stream()
-            .map(each -> LanguageScore
-                            .builder()
-                            .language(languageService.getOrCreate(each.getName()))
-                            .score(each.getScore())
-                            .perfectScore(each.getPerfectScore())
-                            .build())
+            .map(each -> LanguageScore.builder()
+                .language(languageService.getOrCreate(each.getName()))
+                .score(each.getScore())
+                .perfectScore(each.getPerfectScore())
+                .build())
             .collect(Collectors.toList());
     }
     
@@ -95,5 +93,19 @@ public class AnnouncementCreationService {
             .stream()
             .map(each -> subjectService.getOrCreate(each))
             .collect(Collectors.toList());
+    }
+
+    private AnnouncementSequence getOrCreateSequence(AnnouncementInputFormDto announcementInputFormDto) {
+        AnnouncementSequenceInputDto sequenceDto = announcementInputFormDto.getAnnouncementSequence();
+        Company company = companyService.getOrCreate(sequenceDto.getCompanyName());
+        return announcementSequenceService.get(company, sequenceDto.getSequence())
+            .orElseGet(() -> announcementSequenceService.create(
+                AnnouncementSequence.builder()
+                .company(company)
+                .sequence(sequenceDto.getSequence())
+                .receiptStartTimestamp(sequenceDto.getReceiptStartTimestamp())
+                .receiptEndTimestamp(sequenceDto.getReceiptEndTimestamp())
+                .link(sequenceDto.getLink())
+                .build()));
     }
 }

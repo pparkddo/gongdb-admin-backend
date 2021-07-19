@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
+import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Department;
@@ -29,30 +31,28 @@ public class AnnouncementUpdateService {
     private final LanguageService languageService;
     private final PositionService positionService;
     private final SubjectService subjectService;
+    private final AnnouncementSequenceService announcementSequenceService;
 
     @Transactional
     public void update(Long id, AnnouncementInputFormDto dto) {
         List<Certificate> certificates = getOrCreateCertificates(dto);
-        Company company = companyService.getOrCreate(dto.getCompanyName());
         List<Department> departments = getOrCreateDepartments(dto);
+        AnnouncementSequence announcementSequence = getOrCreateSequence(dto);
         List<LanguageScore> languageScores = getOrCreateLanguageScores(dto);
         Position position = positionService.getOrCreate(dto.getPositionName());
         List<Subject> subjects = getOrCreateSubjects(dto);
         Announcement announcement = announcementRepository.findById(id).orElseThrow();
         announcement.updateCertificates(certificates);
-        announcement.updateCompany(company);
         announcement.updateDepartments(departments);
+        announcement.updateAnnouncementSequence(announcementSequence);
         announcement.updateDistrictName(dto.getDistrictName());
         announcement.updateHeadCount(dto.getHeadCount());
         announcement.updateLanguageScores(languageScores);
-        announcement.updateLink(dto.getLink());
         announcement.updateNotes(dto.getNotes());
         announcement.updatePosition(position);
         announcement.updateRank(dto.getRank());
-        announcement.updateReceiptTimestamp(dto.getReceiptTimestamp());
         announcement.updateRecruitLevel(dto.getRecruitLevel());
         announcement.updateRecruitType(dto.getRecruitType());
-        announcement.updateSequence(dto.getSequence());
         announcement.updateSubjects(subjects);
         announcement.updateWorkingType(dto.getWorkingType());
     }
@@ -71,12 +71,11 @@ public class AnnouncementUpdateService {
 
     private List<LanguageScore> getOrCreateLanguageScores(AnnouncementInputFormDto dto) {
         return dto.getLanguageScores().stream()
-            .map(each -> LanguageScore
-                            .builder()
-                            .language(languageService.getOrCreate(each.getName()))
-                            .score(each.getScore())
-                            .perfectScore(each.getPerfectScore())
-                            .build())
+            .map(each -> LanguageScore.builder()
+                .language(languageService.getOrCreate(each.getName()))
+                .score(each.getScore())
+                .perfectScore(each.getPerfectScore())
+                .build())
             .collect(Collectors.toList());
     }
     
@@ -84,5 +83,20 @@ public class AnnouncementUpdateService {
         return dto.getSubjects().stream()
             .map(each -> subjectService.getOrCreate(each))
             .collect(Collectors.toList());
+    }
+
+    private AnnouncementSequence getOrCreateSequence(AnnouncementInputFormDto dto) {
+        AnnouncementSequenceInputDto sequenceDto = dto.getAnnouncementSequence();
+        Company company = companyService.getOrCreate(sequenceDto.getCompanyName());
+        return announcementSequenceService.get(company, sequenceDto.getSequence())
+            .orElseGet(() -> announcementSequenceService.create(
+                AnnouncementSequence.builder()
+                .company(company)
+                .sequence(sequenceDto.getSequence())
+                .receiptStartTimestamp(sequenceDto.getReceiptStartTimestamp())
+                .receiptEndTimestamp(sequenceDto.getReceiptEndTimestamp())
+                .link(sequenceDto.getLink())
+                .build())
+            );
     }
 }

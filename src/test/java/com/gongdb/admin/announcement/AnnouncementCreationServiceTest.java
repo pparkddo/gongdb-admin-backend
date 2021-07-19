@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
@@ -23,46 +24,51 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AnnouncementCreationServiceTest {
     
-    @Autowired
-    private AnnouncementCreationService announcementCreationService;
+    @Autowired private AnnouncementCreationService announcementCreationService;
 
     @Test
     public void createTest() {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .certificates(List.of("certificate1", "certificates2"))
-                .companyName("companyName")
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
 
         Announcement announcement = announcementCreationService.create(announcementInputFormDto);
 
         assertNotNull(announcement);
-        assertEquals(announcement.getAnnouncementLanguageScores().size(), announcementInputFormDto.getLanguageScores().size());
-        assertEquals(announcement.getCompany().getName(), announcementInputFormDto.getCompanyName());
-        assertEquals(announcement.getHeadCount(), announcementInputFormDto.getHeadCount());
-        assertEquals(announcement.getReceiptTimestamp(), announcementInputFormDto.getReceiptTimestamp());
+        assertEquals(2, announcement.getAnnouncementLanguageScores().size());
+        assertEquals("companyName", announcement.getAnnouncementSequence().getCompany().getName());
+        assertEquals("0", announcement.getHeadCount());
+        assertEquals(LocalDateTime.of(2021, 7, 19, 0 ,0),
+            announcement.getAnnouncementSequence().getReceiptStartTimestamp());
     }
 
     private List<LanguageScoreInputDto> getLanguageScoreInputDtoList(List<String> languageScores) {
         return languageScores.stream()
-                             .map(each -> LanguageScoreInputDto.builder()
-                                                               .name(each)
-                                                               .score(each + " score")
-                                                               .perfectScore(each + "perfectScore")
-                                                               .build())
-                             .collect(Collectors.toList());
+            .map(each -> LanguageScoreInputDto.builder()
+                .name(each)
+                .score(each + " score")
+                .perfectScore(each + "perfectScore")
+                .build())
+            .collect(Collectors.toList());
     }
 }

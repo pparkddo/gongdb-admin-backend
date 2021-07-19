@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
+import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.entity.Certificate;
 import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Department;
@@ -27,37 +28,39 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 class AnnouncementRepositoryTest {
 
-    @Autowired
-    private TestEntityManager em;
-
+    @Autowired private TestEntityManager em;
     private Announcement announcement;
 
     @BeforeEach
     public void init() {
-        Company company = getCompany("company");
+        AnnouncementSequence announcementSequence = getAnnouncementSequence(
+            "company",
+            "sequence",
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            "link"
+        );
         Position position = getPosition("position");
         List<Certificate> certificates = getCertificates(List.of("certificate1", "certificate2"));
         List<Department> departments = getDepartments(List.of("department1", "department2"));
         List<Subject> subjects = getSubjects(List.of("subject1", "subject2"));
         List<Language> languages = getLanguages(List.of("language1", "language2"));
         announcement = Announcement.builder()
-                            .company(company)
-                            .position(position)
-                            .certificates(certificates)
-                            .departments(departments)
-                            .subjects(subjects)
-                            .languageScores(getLanguageScores(languages))
-                            .recruitType("recruitType")
-                            .recruitLevel("recruitLevel")
-                            .workingType("workingType")
-                            .receiptTimestamp(LocalDateTime.of(2021, 4, 22, 0, 0))
-                            .sequence("sequence")
-                            .link("link")
-                            .rank("rank")
-                            .districtName("district")
-                            .headCount("0")
-                            .notes(List.of("note1", "note2")).build();
-        em.persistAndFlush(company);
+            .position(position)
+            .announcementSequence(announcementSequence)
+            .certificates(certificates)
+            .departments(departments)
+            .subjects(subjects)
+            .languageScores(getLanguageScores(languages))
+            .recruitType("recruitType")
+            .recruitLevel("recruitLevel")
+            .workingType("workingType")
+            .rank("rank")
+            .districtName("district")
+            .headCount("0")
+            .notes(List.of("note1", "note2")).build();
+        em.persistAndFlush(announcementSequence.getCompany());
+        em.persistAndFlush(announcementSequence);
         em.persistAndFlush(position);
         certificates.forEach(em::persistAndFlush);
         departments.forEach(em::persistAndFlush);
@@ -71,7 +74,7 @@ class AnnouncementRepositoryTest {
     public void createAndFindAnnouncement() {
         Announcement a = em.find(Announcement.class, announcement.getId());
 
-        assertEquals("company", a.getCompany().getName());
+        assertEquals("company", a.getAnnouncementSequence().getCompany().getName());
         assertEquals("position", a.getPosition().getName());
         assertEquals(2, a.getAnnouncementCertificates().size());
         assertEquals(2, a.getAnnouncementDepartments().size());
@@ -94,8 +97,8 @@ class AnnouncementRepositoryTest {
         em.clear();
 
         Long count = em.getEntityManager()
-                       .createQuery("SELECT COUNT(*) FROM AnnouncementCertificate a", Long.class)
-                       .getSingleResult();
+            .createQuery("SELECT COUNT(*) FROM AnnouncementCertificate a", Long.class)
+            .getSingleResult();
         assertEquals(0, count);
     }
     
@@ -109,8 +112,8 @@ class AnnouncementRepositoryTest {
         em.clear();
 
         Long count = em.getEntityManager()
-                       .createQuery("SELECT COUNT(*) FROM AnnouncementNote a", Long.class)
-                       .getSingleResult();
+            .createQuery("SELECT COUNT(*) FROM AnnouncementNote a", Long.class)
+            .getSingleResult();
         assertEquals(0, count);
     }
 
@@ -134,15 +137,15 @@ class AnnouncementRepositoryTest {
         em.persistAndFlush(a);
 
         Long count = em.getEntityManager()
-                       .createQuery("SELECT COUNT(*) FROM Announcement a", Long.class)
-                       .getSingleResult();
+            .createQuery("SELECT COUNT(*) FROM Announcement a", Long.class)
+            .getSingleResult();
         assertEquals(2, a.getAnnouncementCertificates().size());
         assertEquals(
             List.of("certificate3", "certificate4"),
             a.getAnnouncementCertificates()
-             .stream()
-             .map(each -> each.getCertificate().getName())
-             .collect(Collectors.toList()));
+                .stream()
+                .map(each -> each.getCertificate().getName())
+                .collect(Collectors.toList()));
         assertEquals(1, count);
     }
 
@@ -179,11 +182,24 @@ class AnnouncementRepositoryTest {
 
     private List<LanguageScore> getLanguageScores(List<Language> languages) {
         return languages.stream()
-                    .map(each -> LanguageScore.builder()
-                                              .language(each)
-                                              .score(each + " score")
-                                              .perfectScore(each + " perfectScore")
-                                              .build())
-                    .collect(Collectors.toList());
+            .map(each -> LanguageScore.builder()
+                .language(each)
+                .score(each + " score")
+                .perfectScore(each + " perfectScore")
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    private AnnouncementSequence getAnnouncementSequence(String companyName, String sequence,
+            LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp,
+            String link) {
+        Company company = getCompany(companyName);
+        return AnnouncementSequence.builder()
+            .company(company)
+            .sequence(sequence)
+            .receiptStartTimestamp(receiptStartTimestamp)
+            .receiptEndTimestamp(receiptEndTimestamp)
+            .link(link)
+            .build();
     }
 }

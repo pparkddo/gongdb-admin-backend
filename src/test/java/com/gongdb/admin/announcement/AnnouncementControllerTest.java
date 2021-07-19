@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
+import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
@@ -48,23 +49,30 @@ public class AnnouncementControllerTest {
 
     @Test
     public void createAnnouncementTest() throws Exception {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .certificates(List.of("certificate1", "certificates2"))
-                .companyName("회사명")
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
+
         String content = convertToNonNullValueJsonString(announcementInputFormDto);
 
         this.mockMvc
@@ -79,21 +87,29 @@ public class AnnouncementControllerTest {
 
     @Test
     public void createBadRequestAnnouncementTest() throws Exception {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
+
         String content = convertToNonNullValueJsonString(announcementInputFormDto);
         
         this.mockMvc
@@ -108,53 +124,65 @@ public class AnnouncementControllerTest {
 
     @Test
     public void getRecentAnnouncementTest() throws Exception {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .certificates(List.of("certificate1", "certificates2"))
-                .companyName("companyName")
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore1", "languageScore2")))
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
+
         announcementCreationService.create(announcementInputFormDto);
 
         this.mockMvc
             .perform(get(END_POINT + "/recent"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.company.companyName").value("companyName"));
+            .andExpect(jsonPath("$.sequence.company.name").value("companyName"));
     }
 
     @Test
     public void updateAnnouncementTest() throws Exception {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .certificates(List.of("certificate1", "certificates2"))
-                .companyName("companyName")
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore1", "languageScore2")))
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
+
         Announcement announcement = announcementCreationService.create(announcementInputFormDto);
         String content = convertToNonNullValueJsonString(announcementInputFormDto);
 
@@ -170,24 +198,30 @@ public class AnnouncementControllerTest {
 
     @Test
     public void deleteAnnouncementTest() throws Exception {
+        AnnouncementSequenceInputDto announcementSequenceInputDto =
+            AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("link").build();
+
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-                .certificates(List.of("certificate1", "certificates2"))
-                .companyName("companyName")
-                .departments(List.of("department1", "department2"))
-                .districtName("districtName")
-                .headCount("0")
-                .languageScores(getLanguageScoreInputDtoList(List.of("languageScore1", "languageScore2")))
-                .link("link")
-                .notes(List.of("note1", "note2"))
-                .positionName("positionName")
-                .rank("rank")
-                .receiptTimestamp(LocalDateTime.of(2021, 5, 16, 0, 0))
-                .recruitLevel("recruitLevel")
-                .recruitType("recruitType")
-                .sequence("sequence")
-                .subjects(List.of("subject1", "subject2"))
-                .workingType("workingType").build();
+            .announcementSequence(announcementSequenceInputDto)
+            .certificates(List.of("certificate1", "certificates2"))
+            .departments(List.of("department1", "department2"))
+            .districtName("districtName")
+            .headCount("0")
+            .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
+            .notes(List.of("note1", "note2"))
+            .positionName("positionName")
+            .rank("rank")
+            .recruitLevel("recruitLevel")
+            .recruitType("recruitType")
+            .subjects(List.of("subject1", "subject2"))
+            .workingType("workingType").build();
+
         Announcement announcement = announcementCreationService.create(announcementInputFormDto);
 
         this.mockMvc
@@ -198,17 +232,17 @@ public class AnnouncementControllerTest {
 
     private String convertToNonNullValueJsonString(Object value) throws JsonProcessingException {
         return objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                           .writerWithDefaultPrettyPrinter()
-                           .writeValueAsString(value);
+            .writerWithDefaultPrettyPrinter()
+            .writeValueAsString(value);
     }
 
     private List<LanguageScoreInputDto> getLanguageScoreInputDtoList(List<String> languageScores) {
         return languageScores.stream()
-                             .map(each -> LanguageScoreInputDto.builder()
-                                                               .name(each)
-                                                               .score(each + " score")
-                                                               .perfectScore(each + "perfectScore")
-                                                               .build())
-                             .collect(Collectors.toList());
+            .map(each -> LanguageScoreInputDto.builder()
+                .name(each)
+                .score(each + " score")
+                .perfectScore(each + "perfectScore")
+                .build())
+            .collect(Collectors.toList());
     }
 }
