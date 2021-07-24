@@ -10,3 +10,6 @@ spring:
 logging:
   level:
     org.hibernate.type.descriptor: trace
+
+file:
+  path: /tests

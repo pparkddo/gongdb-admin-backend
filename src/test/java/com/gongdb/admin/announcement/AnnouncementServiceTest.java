@@ -18,6 +18,7 @@ import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.entity.Subject;
+import com.gongdb.admin.announcement.entity.UploadFile;
 import com.gongdb.admin.announcement.repository.AnnouncementRepository;
 import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
@@ -57,8 +58,9 @@ public class AnnouncementServiceTest {
             "company",
             "sequence",
             LocalDateTime.of(2021, 7, 18, 0, 0),
-            LocalDateTime.of(20121, 7, 18, 0, 0),
-            "link"
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            "link",
+            List.of()
         );
         Announcement announcement = Announcement.builder()
             .announcementSequence(announcementSequence)
@@ -92,8 +94,9 @@ public class AnnouncementServiceTest {
             "company",
             "sequence",
             LocalDateTime.of(2021, 7, 18, 0, 0),
-            LocalDateTime.of(20121, 7, 18, 0, 0),
-            "link"
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            "link",
+            List.of()
         );
         Announcement announcement1 = Announcement.builder()
             .announcementSequence(announcementSequence)
@@ -142,8 +145,9 @@ public class AnnouncementServiceTest {
             "company",
             "sequence",
             LocalDateTime.of(2021, 7, 18, 0, 0),
-            LocalDateTime.of(20121, 7, 18, 0, 0),
-            "link"
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            "link",
+            List.of()
         );
         Announcement announcement = Announcement.builder()
             .announcementSequence(announcementSequence)
@@ -171,8 +175,9 @@ public class AnnouncementServiceTest {
             "company",
             "sequence",
             LocalDateTime.of(2021, 7, 18, 0, 0),
-            LocalDateTime.of(20121, 7, 18, 0, 0),
-            "link"
+            LocalDateTime.of(2021, 7, 18, 0, 0),
+            "link",
+            List.of()
         );
         Announcement announcement = Announcement.builder()
             .announcementSequence(announcementSequence)
@@ -231,7 +236,7 @@ public class AnnouncementServiceTest {
 
     private AnnouncementSequence createAnnouncementSequence(String companyName, String sequence,
             LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp,
-            String link) {
+            String link, List<UploadFile> uploadFiles) {
         Company company = getOrCreateCompany(companyName);
         AnnouncementSequence announcementSequence = AnnouncementSequence.builder()
             .company(company)
@@ -239,7 +244,7 @@ public class AnnouncementServiceTest {
             .receiptStartTimestamp(receiptStartTimestamp)
             .receiptEndTimestamp(receiptEndTimestamp)
             .link(link)
-            .build();
+            .uploadFiles(uploadFiles).build();
         return announcementSequenceService.create(announcementSequence);
     }
 }

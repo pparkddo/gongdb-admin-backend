@@ -13,3 +13,6 @@ spring:
     url: jdbc:mysql://localhost:3306/gongdb-admin?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: my-secret-pw
+
+file:
+  path: /files

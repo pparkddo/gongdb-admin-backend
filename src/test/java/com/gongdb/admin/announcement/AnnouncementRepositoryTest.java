@@ -16,6 +16,7 @@ import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.entity.Subject;
+import com.gongdb.admin.announcement.entity.UploadFile;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,8 @@ class AnnouncementRepositoryTest {
             "sequence",
             LocalDateTime.of(2021, 7, 18, 0, 0),
             LocalDateTime.of(2021, 7, 18, 0, 0),
-            "link"
+            "link",
+            List.of()
         );
         Position position = getPosition("position");
         List<Certificate> certificates = getCertificates(List.of("certificate1", "certificate2"));
@@ -192,7 +194,7 @@ class AnnouncementRepositoryTest {
 
     private AnnouncementSequence getAnnouncementSequence(String companyName, String sequence,
             LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp,
-            String link) {
+            String link, List<UploadFile> uploadFiles) {
         Company company = getCompany(companyName);
         return AnnouncementSequence.builder()
             .company(company)
@@ -200,6 +202,6 @@ class AnnouncementRepositoryTest {
             .receiptStartTimestamp(receiptStartTimestamp)
             .receiptEndTimestamp(receiptEndTimestamp)
             .link(link)
-            .build();
+            .uploadFiles(uploadFiles).build();
     }
 }

@@ -74,10 +74,6 @@ public class Announcement extends BaseCreateAuditEntity {
         this.position = position;
     }
 
-    public void updateAnnouncementSequence(AnnouncementSequence announcementSequence) {
-        this.announcementSequence = announcementSequence;
-    }
-
     public void updateRecruitType(String recruitType) {
         this.recruitType = recruitType;
     }

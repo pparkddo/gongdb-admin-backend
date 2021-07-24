@@ -1,13 +1,17 @@
 package com.gongdb.admin.announcement.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -44,6 +48,9 @@ public class AnnouncementSequence extends BaseCreateAuditEntity {
     @Column(nullable = true)
     private String link;
 
+    @OneToMany(mappedBy = "announcementSequence", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Attachment> attachments = new ArrayList<>();
+
     public void updateCompany(Company company) {
         this.company = company;
     }
@@ -64,9 +71,24 @@ public class AnnouncementSequence extends BaseCreateAuditEntity {
         this.link = link;
     }
 
+    public void updateAttachments(List<UploadFile> uploadFiles) {
+        attachments.clear();
+        addAttachments(uploadFiles);
+    }
+
+    private void addAttachments(List<UploadFile> uploadFiles) {
+        for (UploadFile each : uploadFiles) {
+            Attachment attachment = Attachment.builder()
+                .announcementSequence(this)
+                .uploadFile(each).build();
+            this.attachments.add(attachment);
+        }
+    }
+
     @Builder
     private AnnouncementSequence(Company company, String sequence,
-            LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp, String link) {
+            LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp, String link,
+            List<UploadFile> uploadFiles) {
         if (receiptStartTimestamp.isAfter(receiptEndTimestamp)) {
             throw new IllegalArgumentException("receiptStartTimestamp should be earlier than receiptEndTimestamp");
         }
@@ -75,6 +97,7 @@ public class AnnouncementSequence extends BaseCreateAuditEntity {
         this.receiptStartTimestamp = receiptStartTimestamp;
         this.receiptEndTimestamp = receiptEndTimestamp;
         this.link = link;
+        addAttachments(uploadFiles);
     }
 }
 

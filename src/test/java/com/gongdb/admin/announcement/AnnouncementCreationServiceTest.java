@@ -10,8 +10,12 @@ import java.util.stream.Collectors;
 import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
+import com.gongdb.admin.announcement.dto.response.AnnouncementDto;
 import com.gongdb.admin.announcement.entity.Announcement;
+import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
+import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
+import com.gongdb.admin.announcement.service.AnnouncementService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnnouncementCreationServiceTest {
     
     @Autowired private AnnouncementCreationService announcementCreationService;
+    @Autowired private AnnouncementService announcementService;
+    @Autowired private AnnouncementSequenceService announcementSequenceService;
 
     @Test
     public void createTest() {
@@ -34,11 +40,13 @@ public class AnnouncementCreationServiceTest {
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of()).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
@@ -51,15 +59,15 @@ public class AnnouncementCreationServiceTest {
             .recruitType("recruitType")
             .subjects(List.of("subject1", "subject2"))
             .workingType("workingType").build();
+        Announcement saved = announcementCreationService.create(sequence.getId(), announcementInputFormDto);
 
-        Announcement announcement = announcementCreationService.create(announcementInputFormDto);
+        AnnouncementDto dto = announcementService.get(saved.getId());
 
-        assertNotNull(announcement);
-        assertEquals(2, announcement.getAnnouncementLanguageScores().size());
-        assertEquals("companyName", announcement.getAnnouncementSequence().getCompany().getName());
-        assertEquals("0", announcement.getHeadCount());
-        assertEquals(LocalDateTime.of(2021, 7, 19, 0 ,0),
-            announcement.getAnnouncementSequence().getReceiptStartTimestamp());
+        assertNotNull(dto);
+        assertEquals(2, dto.getLanguageScores().size());
+        assertEquals("companyName", dto.getSequence().getCompany().getName());
+        assertEquals("0", dto.getHeadCount());
+        assertEquals(LocalDateTime.of(2021, 7, 19, 0 ,0), dto.getSequence().getReceiptStartTimestamp());
     }
 
     private List<LanguageScoreInputDto> getLanguageScoreInputDtoList(List<String> languageScores) {

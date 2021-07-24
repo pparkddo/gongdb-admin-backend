@@ -19,13 +19,16 @@ import com.gongdb.admin.announcement.dto.request.AnnouncementInputFormDto;
 import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.dto.request.LanguageScoreInputDto;
 import com.gongdb.admin.announcement.entity.Announcement;
+import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.service.AnnouncementCreationService;
+import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,16 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 public class AnnouncementControllerTest {
     
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @Autowired private AnnouncementCreationService announcementCreationService;
+    @Autowired private AnnouncementSequenceService announcementSequenceService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private AnnouncementCreationService announcementCreationService;
-
-    private static final String END_POINT = "/api/announcement";
+    private static final String ROOT_END_POINT = "/api";
 
     @Test
     public void createAnnouncementTest() throws Exception {
@@ -55,11 +54,13 @@ public class AnnouncementControllerTest {
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of()).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
@@ -77,7 +78,7 @@ public class AnnouncementControllerTest {
 
         this.mockMvc
             .perform(
-                post(END_POINT)
+                post(ROOT_END_POINT + "/sequence/" + sequence.getId() + "/announcement")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
@@ -89,21 +90,24 @@ public class AnnouncementControllerTest {
     public void createBadRequestAnnouncementTest() throws Exception {
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of()).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
             .headCount("0")
             .languageScores(getLanguageScoreInputDtoList(List.of("languageScore0", "languageScore2")))
             .notes(List.of("note1", "note2"))
-            .positionName("positionName")
+            // .positionName("positionName")  // suppose bad request
             .rank("rank")
             .recruitLevel("recruitLevel")
             .recruitType("recruitType")
@@ -114,7 +118,7 @@ public class AnnouncementControllerTest {
         
         this.mockMvc
             .perform(
-                post(END_POINT)
+                post(ROOT_END_POINT + "/sequence/" + sequence.getId() + "/announcement")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
@@ -130,11 +134,13 @@ public class AnnouncementControllerTest {
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of()).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
@@ -147,11 +153,10 @@ public class AnnouncementControllerTest {
             .recruitType("recruitType")
             .subjects(List.of("subject1", "subject2"))
             .workingType("workingType").build();
-
-        announcementCreationService.create(announcementInputFormDto);
+        announcementCreationService.create(sequence.getId(), announcementInputFormDto);
 
         this.mockMvc
-            .perform(get(END_POINT + "/recent"))
+            .perform(get(ROOT_END_POINT + "/announcement/recent"))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.sequence.company.name").value("companyName"));
@@ -165,11 +170,13 @@ public class AnnouncementControllerTest {
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of()).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
@@ -182,13 +189,14 @@ public class AnnouncementControllerTest {
             .recruitType("recruitType")
             .subjects(List.of("subject1", "subject2"))
             .workingType("workingType").build();
+        Announcement announcement =
+            announcementCreationService.create(sequence.getId(), announcementInputFormDto);
 
-        Announcement announcement = announcementCreationService.create(announcementInputFormDto);
         String content = convertToNonNullValueJsonString(announcementInputFormDto);
 
         this.mockMvc
             .perform(
-                put(END_POINT + "/" + announcement.getId())
+                put(ROOT_END_POINT + "/announcement/" + announcement.getId())
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
             )
@@ -198,17 +206,21 @@ public class AnnouncementControllerTest {
 
     @Test
     public void deleteAnnouncementTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files", "test.txt", MediaType.TEXT_PLAIN_VALUE, "test".getBytes());
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
             .companyName("companyName")
             .sequence("sequence")
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
-            .link("link").build();
+            .link("link")
+            .files(List.of(file)).build();
+        AnnouncementSequence sequence =
+            announcementSequenceService.create(announcementSequenceInputDto);
 
         AnnouncementInputFormDto announcementInputFormDto = 
             AnnouncementInputFormDto.builder()
-            .announcementSequence(announcementSequenceInputDto)
             .certificates(List.of("certificate1", "certificates2"))
             .departments(List.of("department1", "department2"))
             .districtName("districtName")
@@ -222,10 +234,11 @@ public class AnnouncementControllerTest {
             .subjects(List.of("subject1", "subject2"))
             .workingType("workingType").build();
 
-        Announcement announcement = announcementCreationService.create(announcementInputFormDto);
+        Announcement announcement =
+            announcementCreationService.create(sequence.getId(), announcementInputFormDto);
 
         this.mockMvc
-            .perform(delete(END_POINT + "/" + announcement.getId()))
+            .perform(delete(ROOT_END_POINT + "/announcement/" + announcement.getId()))
             .andDo(print())
             .andExpect(status().isOk());
     }

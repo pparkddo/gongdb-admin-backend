@@ -26,37 +26,38 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/announcement")
+@RequestMapping("/api")
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
     private final AnnouncementCreationService announcementCreationService;
     private final AnnouncementUpdateService announcementUpdateService;
 
-    @GetMapping
+    @GetMapping("/announcement")
     public Page<AnnouncementDto> getAnnouncements(
             @PageableDefault(sort = "id", direction = Direction.DESC) Pageable pageable) {
         return announcementService.getAll(pageable);
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/announcement/{id}")
     public AnnouncementDto getAnnouncement(@PathVariable Long id) {
         return announcementService.get(id);
     }
 
-    @GetMapping("/recent")
+    @GetMapping("/announcement/recent")
     public AnnouncementDto getRecentAnnouncement() {
         return announcementService.getRecentAnnouncement();
     }
 
-    @PostMapping
+    @PostMapping("/sequence/{sequenceId}/announcement")
     public SimpleMessageResponse createAnnouncement(
+            @PathVariable Long sequenceId,
             @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
-        announcementCreationService.create(announcementInputFormDto);
+        announcementCreationService.create(sequenceId, announcementInputFormDto);
         return SimpleMessageResponse.of("정상적으로 생성되었습니다");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/announcement/{id}")
     public SimpleMessageResponse updateAnnouncement(
             @PathVariable Long id,
             @Valid @RequestBody AnnouncementInputFormDto announcementInputFormDto) {
@@ -64,7 +65,7 @@ public class AnnouncementController {
         return SimpleMessageResponse.of("정상적으로 수정되었습니다");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/announcement/{id}")
     public SimpleMessageResponse deleteAnnouncement(@PathVariable Long id) {
         announcementService.delete(id);
         return SimpleMessageResponse.of("정상적으로 삭제되었습니다");

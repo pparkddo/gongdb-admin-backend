@@ -24,7 +24,6 @@ public class AnnouncementInputFormDto {
     @NotEmpty private String workingType;
     @NotEmpty private String districtName;
     @NotEmpty private String headCount;
-    @Valid private AnnouncementSequenceInputDto announcementSequence;
 
     @Valid
     @UniqueValue
@@ -50,13 +49,11 @@ public class AnnouncementInputFormDto {
 
     @Builder
     private AnnouncementInputFormDto(String positionName, String recruitType,
-            AnnouncementSequenceInputDto announcementSequence, String recruitLevel,
-            String workingType, String districtName, String headCount, List<String> certificates,
-            List<String> departments, List<String> subjects,
+            String recruitLevel, String workingType, String districtName, String headCount,
+            List<String> certificates, List<String> departments, List<String> subjects,
             List<LanguageScoreInputDto> languageScores, List<String> notes, String rank) {
         this.positionName = positionName;
         this.recruitType = recruitType;
-        this.announcementSequence = announcementSequence;
         this.recruitLevel = recruitLevel;
         this.workingType = workingType;
         this.districtName = districtName;
