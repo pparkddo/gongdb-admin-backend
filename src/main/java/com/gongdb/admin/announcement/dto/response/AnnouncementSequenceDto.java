@@ -24,6 +24,7 @@ public class AnnouncementSequenceDto {
     private AnnouncementSequenceDto(Long id, CompanyDto company, String sequence,
             LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp, String link) {
         this.id = id;
+        this.sequence = sequence;
         this.company = company;
         this.receiptStartTimestamp = receiptStartTimestamp;
         this.receiptEndTimestamp = receiptEndTimestamp;

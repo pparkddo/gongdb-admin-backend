@@ -1,0 +1,41 @@
+= gongdb api document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+== 공고 API
+=== 추가
+==== Request
+include::{snippets}/announcement-create/path-parameters.adoc[]
+include::{snippets}/announcement-create/request-fields.adoc[]
+include::{snippets}/announcement-create/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-create/response-fields.adoc[]
+include::{snippets}/announcement-create/http-response.adoc[]
+
+=== 최근 공고 조회
+==== Request
+include::{snippets}/announcement-recent/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-recent/response-fields.adoc[]
+include::{snippets}/announcement-recent/http-response.adoc[]
+
+=== 수정
+==== Request
+include::{snippets}/announcement-update/path-parameters.adoc[]
+include::{snippets}/announcement-update/request-fields.adoc[]
+include::{snippets}/announcement-update/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-update/response-fields.adoc[]
+include::{snippets}/announcement-update/http-response.adoc[]
+
+=== 삭제
+==== Request
+include::{snippets}/announcement-delete/path-parameters.adoc[]
+include::{snippets}/announcement-delete/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-delete/response-fields.adoc[]
+include::{snippets}/announcement-delete/http-response.adoc[]
