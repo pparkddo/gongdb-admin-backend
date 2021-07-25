@@ -1,5 +1,15 @@
 package com.gongdb.admin.announcement;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,24 +25,31 @@ import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@ExtendWith(RestDocumentationExtension.class)
 public class AnnouncementSequenceControllerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -40,6 +57,16 @@ public class AnnouncementSequenceControllerTest {
     @Autowired private AnnouncementSequenceService announcementSequenceService;
 
     private static final String END_POINT = "/api/sequence";
+    
+    @BeforeEach
+    public void setUp(WebApplicationContext webApplicationContext,
+            RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation).operationPreprocessors()
+                .withRequestDefaults(prettyPrint())
+                .withResponseDefaults(prettyPrint())) 
+            .build();
+    }
 
     @Test
     public void createTest() throws Exception {
@@ -47,13 +74,13 @@ public class AnnouncementSequenceControllerTest {
             "files",
             "first.txt",
             MediaType.TEXT_PLAIN_VALUE,
-            "MultipartFile Test".getBytes());
+            "First File!".getBytes());
 
         MockMultipartFile secondFile = new MockMultipartFile(
             "files",
             "second.txt",
             MediaType.TEXT_PLAIN_VALUE,
-            "MultipartFile Test".getBytes());
+            "Second File!!".getBytes());
 
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
@@ -80,7 +107,26 @@ public class AnnouncementSequenceControllerTest {
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
             )
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-create",
+                requestParts(
+                    partWithName("content").description("차수 정보"),
+                    partWithName("files").description("업로드 할 파일").optional()
+                ),
+                requestPartFields(
+                    "content",
+                    fieldWithPath("companyName").description("회사명"),
+                    fieldWithPath("sequence").description("차수명"),
+                    fieldWithPath("receiptStartTimestamp").description("접수 시작일"),
+                    fieldWithPath("receiptEndTimestamp").description("접수 종료일"),
+                    fieldWithPath("link").description("공고 링크").optional()
+                ),
+                responseFields(
+                    fieldWithPath("timestamp").description("응답 시각"),
+                    fieldWithPath("message").description("응답 메시지")
+                )
+            ));
     }
 
     @Test
@@ -94,19 +140,25 @@ public class AnnouncementSequenceControllerTest {
             .files(List.of()).build();
         AnnouncementSequence sequence = announcementSequenceService.create(dto);
 
-        String data = convertToNonNullValueJsonString(dto);
+        AnnouncementSequenceInputDto modified = AnnouncementSequenceInputDto.builder()
+            .companyName("modifiedCompanyName")
+            .sequence("modifiedSequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
+            .link("modifiedLink").build();
+        String data = convertToNonNullValueJsonString(modified);
 
         MockMultipartFile firstFile = new MockMultipartFile(
             "files",
             "first.txt",
             MediaType.TEXT_PLAIN_VALUE,
-            "MultipartFile Test".getBytes());
+            "First File!".getBytes());
 
         MockMultipartFile secondFile = new MockMultipartFile(
             "files",
             "second.txt",
             MediaType.TEXT_PLAIN_VALUE,
-            "MultipartFile Test".getBytes());
+            "Second File!!".getBytes());
 
         MockMultipartFile content = new MockMultipartFile(
             "content",
@@ -116,14 +168,34 @@ public class AnnouncementSequenceControllerTest {
 
         this.mockMvc
             .perform(
-                getPutMultipartBuilder(END_POINT + "/" + sequence.getId())
+                getPutMultipartBuilder(END_POINT + "/{id}", sequence.getId())
                 .file(firstFile)
                 .file(secondFile)
                 .file(content)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
             )
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-update",
+                pathParameters(parameterWithName("id").description("차수 ID")),
+                requestParts(
+                    partWithName("content").description("차수 정보"),
+                    partWithName("files").description("업로드 할 파일").optional()
+                ),
+                requestPartFields(
+                    "content",
+                    fieldWithPath("companyName").description("회사명"),
+                    fieldWithPath("sequence").description("차수명"),
+                    fieldWithPath("receiptStartTimestamp").description("접수 시작일"),
+                    fieldWithPath("receiptEndTimestamp").description("접수 종료일"),
+                    fieldWithPath("link").description("공고 링크").optional()
+                ),
+                responseFields(
+                    fieldWithPath("timestamp").description("응답 시각"),
+                    fieldWithPath("message").description("응답 메시지")
+                )
+            ));
     }
 
     private String convertToNonNullValueJsonString(Object value) throws JsonProcessingException {
@@ -132,8 +204,8 @@ public class AnnouncementSequenceControllerTest {
             .writeValueAsString(value);
     }
 
-    private MockMultipartHttpServletRequestBuilder getPutMultipartBuilder(String uri) {
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(uri);
+    private MockMultipartHttpServletRequestBuilder getPutMultipartBuilder(String urlTemplate, Object... urlVariables) {
+        MockMultipartHttpServletRequestBuilder builder = RestDocumentationRequestBuilders.fileUpload(urlTemplate, urlVariables);
         builder.with(new RequestPostProcessor(){
             @Override
             public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {

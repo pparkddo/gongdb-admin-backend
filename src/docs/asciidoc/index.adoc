@@ -6,8 +6,47 @@
 :toclevels: 4
 :sectlinks:
 
+== 공고 차수 API
+
+=== 생성
+==== Request
+include::{snippets}/sequence-create/request-parts.adoc[]
+include::{snippets}/sequence-create/request-part-content-fields.adoc[]
+include::{snippets}/sequence-create/http-request.adoc[]
+==== Response
+include::{snippets}/sequence-create/response-fields.adoc[]
+include::{snippets}/sequence-create/http-response.adoc[]
+
+=== 수정
+==== Request
+include::{snippets}/sequence-update/path-parameters.adoc[]
+include::{snippets}/sequence-update/request-parts.adoc[]
+include::{snippets}/sequence-update/request-part-content-fields.adoc[]
+include::{snippets}/sequence-update/http-request.adoc[]
+==== Response
+include::{snippets}/sequence-update/response-fields.adoc[]
+include::{snippets}/sequence-update/http-response.adoc[]
+
+
 == 공고 API
-=== 추가
+
+=== 조회
+==== Request
+include::{snippets}/announcement-get/path-parameters.adoc[]
+include::{snippets}/announcement-get/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-get/response-fields.adoc[]
+include::{snippets}/announcement-get/http-response.adoc[]
+
+=== 페이징 조회
+==== Request
+include::{snippets}/announcement-get-page/request-parameters.adoc[]
+include::{snippets}/announcement-get-page/http-request.adoc[]
+==== Response
+include::{snippets}/announcement-get-page/response-fields.adoc[]
+include::{snippets}/announcement-get-page/http-response.adoc[]
+
+=== 생성 
 ==== Request
 include::{snippets}/announcement-create/path-parameters.adoc[]
 include::{snippets}/announcement-create/request-fields.adoc[]
@@ -39,3 +78,100 @@ include::{snippets}/announcement-delete/http-request.adoc[]
 ==== Response
 include::{snippets}/announcement-delete/response-fields.adoc[]
 include::{snippets}/announcement-delete/http-response.adoc[]
+
+
+== 자격증 API
+
+=== 리스트 조회
+==== Request
+include::{snippets}/certificate-get-list/http-request.adoc[]
+==== Response
+include::{snippets}/certificate-get-list/response-fields.adoc[]
+include::{snippets}/certificate-get-list/http-response.adoc[]
+
+=== 수정 
+==== Request
+include::{snippets}/certificate-update/path-parameters.adoc[]
+include::{snippets}/certificate-update/request-fields.adoc[]
+include::{snippets}/certificate-update/http-request.adoc[]
+==== Response
+include::{snippets}/certificate-update/response-fields.adoc[]
+include::{snippets}/certificate-update/http-response.adoc[]
+
+
+== 회사 API
+
+=== 수정 
+==== Request
+include::{snippets}/company-update/path-parameters.adoc[]
+include::{snippets}/company-update/request-fields.adoc[]
+include::{snippets}/company-update/http-request.adoc[]
+==== Response
+include::{snippets}/company-update/response-fields.adoc[]
+include::{snippets}/company-update/http-response.adoc[]
+
+
+== 학과 API
+
+=== 리스트 조회
+==== Request
+include::{snippets}/department-get-list/http-request.adoc[]
+==== Response
+include::{snippets}/department-get-list/response-fields.adoc[]
+include::{snippets}/department-get-list/http-response.adoc[]
+
+=== 수정 
+==== Request
+include::{snippets}/department-update/path-parameters.adoc[]
+include::{snippets}/department-update/request-fields.adoc[]
+include::{snippets}/department-update/http-request.adoc[]
+==== Response
+include::{snippets}/department-update/response-fields.adoc[]
+include::{snippets}/department-update/http-response.adoc[]
+
+
+== 어학 API
+
+=== 수정 
+==== Request
+include::{snippets}/language-update/path-parameters.adoc[]
+include::{snippets}/language-update/request-fields.adoc[]
+include::{snippets}/language-update/http-request.adoc[]
+==== Response
+include::{snippets}/language-update/response-fields.adoc[]
+include::{snippets}/language-update/http-response.adoc[]
+
+
+== 직무 API
+
+=== 수정 
+==== Request
+include::{snippets}/position-update/path-parameters.adoc[]
+include::{snippets}/position-update/request-fields.adoc[]
+include::{snippets}/position-update/http-request.adoc[]
+==== Response
+include::{snippets}/position-update/response-fields.adoc[]
+include::{snippets}/position-update/http-response.adoc[]
+
+
+== 과목 API
+
+=== 수정 
+==== Request
+include::{snippets}/subject-update/path-parameters.adoc[]
+include::{snippets}/subject-update/request-fields.adoc[]
+include::{snippets}/subject-update/http-request.adoc[]
+==== Response
+include::{snippets}/subject-update/response-fields.adoc[]
+include::{snippets}/subject-update/http-response.adoc[]
+
+
+== 검색 API
+
+=== 기본정보 검색
+==== Request
+include::{snippets}/search-search/request-parameters.adoc[]
+include::{snippets}/search-search/http-request.adoc[]
+==== Response
+include::{snippets}/search-search/response-fields.adoc[]
+include::{snippets}/search-search/http-response.adoc[]
