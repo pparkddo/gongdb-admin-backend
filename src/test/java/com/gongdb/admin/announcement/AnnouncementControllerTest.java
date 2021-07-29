@@ -73,6 +73,12 @@ public class AnnouncementControllerTest {
 
     @Test
     public void getAnnouncementsTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
             .companyName("companyName")
@@ -80,7 +86,7 @@ public class AnnouncementControllerTest {
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .link("link")
-            .files(List.of()).build();
+            .files(List.of(file)).build();
         AnnouncementSequence sequence =
             announcementSequenceService.create(announcementSequenceInputDto);
 
@@ -122,6 +128,9 @@ public class AnnouncementControllerTest {
                     fieldWithPath("content[].sequence.receiptStartTimestamp").description("접수 시작일"),
                     fieldWithPath("content[].sequence.receiptEndTimestamp").description("접수 종료일"),
                     fieldWithPath("content[].sequence.link").description("공고 링크"),
+                    fieldWithPath("content[].sequence.files[]").description("공고 관련 파일"),
+                    fieldWithPath("content[].sequence.files[].id").description("공고 관련 파일 ID"),
+                    fieldWithPath("content[].sequence.files[].fileName").description("공고 관련 파일 이름"),
                     fieldWithPath("content[].certificates").description("자격증"),
                     fieldWithPath("content[].departments").description("학과"),
                     fieldWithPath("content[].subjects").description("과목"),
@@ -167,6 +176,12 @@ public class AnnouncementControllerTest {
 
     @Test
     public void getAnnouncementTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
             .companyName("companyName")
@@ -174,7 +189,7 @@ public class AnnouncementControllerTest {
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .link("link")
-            .files(List.of()).build();
+            .files(List.of(file)).build();
         AnnouncementSequence sequence =
             announcementSequenceService.create(announcementSequenceInputDto);
 
@@ -215,6 +230,9 @@ public class AnnouncementControllerTest {
                     fieldWithPath("sequence.receiptStartTimestamp").description("접수 시작일"),
                     fieldWithPath("sequence.receiptEndTimestamp").description("접수 종료일"),
                     fieldWithPath("sequence.link").description("공고 링크"),
+                    fieldWithPath("sequence.files[]").description("공고 관련 파일"),
+                    fieldWithPath("sequence.files[].id").description("공고 관련 파일 ID"),
+                    fieldWithPath("sequence.files[].fileName").description("공고 관련 파일 이름"),
                     fieldWithPath("certificates").description("자격증"),
                     fieldWithPath("departments").description("학과"),
                     fieldWithPath("subjects").description("과목"),
@@ -345,6 +363,12 @@ public class AnnouncementControllerTest {
 
     @Test
     public void getRecentAnnouncementTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
         AnnouncementSequenceInputDto announcementSequenceInputDto =
             AnnouncementSequenceInputDto.builder()
             .companyName("companyName")
@@ -352,7 +376,7 @@ public class AnnouncementControllerTest {
             .receiptStartTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .receiptEndTimestamp(LocalDateTime.of(2021, 7, 19, 0, 0))
             .link("link")
-            .files(List.of()).build();
+            .files(List.of(file)).build();
         AnnouncementSequence sequence =
             announcementSequenceService.create(announcementSequenceInputDto);
 
@@ -390,6 +414,9 @@ public class AnnouncementControllerTest {
                     fieldWithPath("sequence.receiptStartTimestamp").description("접수 시작일"),
                     fieldWithPath("sequence.receiptEndTimestamp").description("접수 종료일"),
                     fieldWithPath("sequence.link").description("공고 링크"),
+                    fieldWithPath("sequence.files[]").description("공고 관련 파일"),
+                    fieldWithPath("sequence.files[].id").description("공고 관련 파일 ID"),
+                    fieldWithPath("sequence.files[].fileName").description("공고 관련 파일 이름"),
                     fieldWithPath("certificates").description("자격증"),
                     fieldWithPath("departments").description("학과"),
                     fieldWithPath("subjects").description("과목"),

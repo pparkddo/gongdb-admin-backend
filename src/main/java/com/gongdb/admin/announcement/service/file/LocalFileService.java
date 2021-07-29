@@ -1,15 +1,21 @@
 package com.gongdb.admin.announcement.service.file;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import com.gongdb.admin.announcement.dto.response.FileDto;
 import com.gongdb.admin.announcement.entity.UploadFile;
 import com.gongdb.admin.announcement.repository.UploadFileRepository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +45,7 @@ public class LocalFileService implements FileService {
         try {
             file.transferTo(Paths.get(filePath, fileName));
         } catch (IllegalStateException | IOException e) {
-            throw new FileException("파일을 생성 중 오류가 발생했습니다");
+            throw new FileException("파일 생성 중 오류가 발생했습니다");
         }
         return uploadFile;
     }
@@ -50,7 +56,23 @@ public class LocalFileService implements FileService {
         try {
             Files.delete(Paths.get(uploadFile.getFilePath(), uploadFile.getFileName()));
         } catch (IOException e) {
-            throw new FileException("파일을 삭제 중 오류가 발생했습니다");
+            throw new FileException("파일 삭제 중 오류가 발생했습니다");
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FileDto download(Long id) {
+        UploadFile uploadFile = uploadFileRepository.findById(id).orElseThrow();
+        try {
+            Path path = Paths.get(filePath, uploadFile.getFileName());
+            Resource resource = new UrlResource(path.toUri());
+            return FileDto.builder()
+                .fileName(uploadFile.getOriginalFileName())
+                .mediaType(MediaType.parseMediaType(uploadFile.getContentType()))
+                .resource(resource).build();
+        } catch (MalformedURLException e) {
+            throw new FileException("파일을 찾을 수 없습니다");
         }
     }
 }

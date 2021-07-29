@@ -245,6 +245,20 @@ include::{snippets}/search-search/response-fields.adoc[]
 include::{snippets}/search-search/http-response.adoc[]
 
 
+== 파일 API
+
+=== 파일 다운로드
+
+Request
+
+include::{snippets}/file-download/path-parameters.adoc[]
+include::{snippets}/file-download/http-request.adoc[]
+
+Response
+
+include::{snippets}/file-download/http-response.adoc[]
+
+
 == 에러 API
 
 Response
