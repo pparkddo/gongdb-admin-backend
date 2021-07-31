@@ -23,11 +23,12 @@ public class AnnouncementSequenceDto {
     private LocalDateTime receiptEndTimestamp;
     private String link;
     private List<UploadFileDto> files = new ArrayList<>();
+    private LocalDateTime createdTimestamp;
 
     @Builder
     private AnnouncementSequenceDto(Long id, CompanyDto company, String sequence,
             LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp, String link,
-            List<UploadFileDto> files) {
+            List<UploadFileDto> files, LocalDateTime createdTimestamp) {
         this.id = id;
         this.sequence = sequence;
         this.company = company;
@@ -35,6 +36,7 @@ public class AnnouncementSequenceDto {
         this.receiptEndTimestamp = receiptEndTimestamp;
         this.link = link;
         this.files = files;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public static AnnouncementSequenceDto of(AnnouncementSequence announcementSequence) {
@@ -48,6 +50,7 @@ public class AnnouncementSequenceDto {
             .files(
                 announcementSequence.getAttachments().stream()
                 .map(UploadFileDto::of).collect(Collectors.toList()))
+            .createdTimestamp(announcementSequence.getCreatedTimestamp())
             .build();
     }
 }

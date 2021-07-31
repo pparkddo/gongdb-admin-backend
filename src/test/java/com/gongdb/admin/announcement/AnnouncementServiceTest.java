@@ -8,22 +8,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.dto.response.AnnouncementDto;
 import com.gongdb.admin.announcement.embeddable.LanguageScore;
 import com.gongdb.admin.announcement.entity.Announcement;
 import com.gongdb.admin.announcement.entity.AnnouncementSequence;
 import com.gongdb.admin.announcement.entity.Certificate;
-import com.gongdb.admin.announcement.entity.Company;
 import com.gongdb.admin.announcement.entity.Department;
 import com.gongdb.admin.announcement.entity.Language;
 import com.gongdb.admin.announcement.entity.Position;
 import com.gongdb.admin.announcement.entity.Subject;
-import com.gongdb.admin.announcement.entity.UploadFile;
 import com.gongdb.admin.announcement.repository.AnnouncementRepository;
 import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
 import com.gongdb.admin.announcement.service.AnnouncementService;
 import com.gongdb.admin.announcement.service.CertificateService;
-import com.gongdb.admin.announcement.service.CompanyService;
 import com.gongdb.admin.announcement.service.DepartmentService;
 import com.gongdb.admin.announcement.service.LanguageService;
 import com.gongdb.admin.announcement.service.PositionService;
@@ -36,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -44,7 +43,6 @@ public class AnnouncementServiceTest {
 
     @Autowired private AnnouncementRepository announcementRepository;
     @Autowired private CertificateService certificateService;
-    @Autowired private CompanyService companyService;
     @Autowired private DepartmentService departmentService;
     @Autowired private LanguageService languageService;
     @Autowired private PositionService positionService;
@@ -200,10 +198,6 @@ public class AnnouncementServiceTest {
         assertEquals(0, announcementRepository.count());
     }
 
-    private Company getOrCreateCompany(String company) {
-        return companyService.getOrCreate(company);
-    }
-
     private Position getOrCreatePosition(String position) {
         return positionService.getOrCreate(position);
     }
@@ -236,15 +230,14 @@ public class AnnouncementServiceTest {
 
     private AnnouncementSequence createAnnouncementSequence(String companyName, String sequence,
             LocalDateTime receiptStartTimestamp, LocalDateTime receiptEndTimestamp,
-            String link, List<UploadFile> uploadFiles) {
-        Company company = getOrCreateCompany(companyName);
-        AnnouncementSequence announcementSequence = AnnouncementSequence.builder()
-            .company(company)
+            String link, List<MultipartFile> files) {
+        AnnouncementSequenceInputDto sequenceDto = AnnouncementSequenceInputDto.builder()
+            .companyName(companyName)
             .sequence(sequence)
             .receiptStartTimestamp(receiptStartTimestamp)
             .receiptEndTimestamp(receiptEndTimestamp)
             .link(link)
-            .uploadFiles(uploadFiles).build();
-        return announcementSequenceService.create(announcementSequence);
+            .files(files).build();
+        return announcementSequenceService.create(sequenceDto);
     }
 }

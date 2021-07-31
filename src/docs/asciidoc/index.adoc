@@ -8,6 +8,31 @@
 
 == 공고 차수 API
 
+=== 조회
+
+Request
+
+include::{snippets}/sequence-get/path-parameters.adoc[]
+include::{snippets}/sequence-get/http-request.adoc[]
+
+Response
+
+include::{snippets}/sequence-get/response-fields.adoc[]
+include::{snippets}/sequence-get/http-response.adoc[]
+
+=== 페이징 조회
+
+Request
+
+include::{snippets}/sequence-get-page/request-parameters.adoc[]
+include::{snippets}/sequence-get-page/http-request.adoc[]
+
+Response
+
+include::{snippets}/sequence-get-page/response-fields.adoc[]
+include::{snippets}/sequence-get-page/http-response.adoc[]
+
+
 === 생성
 
 Request
@@ -34,6 +59,18 @@ Response
 
 include::{snippets}/sequence-update/response-fields.adoc[]
 include::{snippets}/sequence-update/http-response.adoc[]
+
+=== 삭제
+
+Request
+
+include::{snippets}/sequence-delete/path-parameters.adoc[]
+include::{snippets}/sequence-delete/http-request.adoc[]
+
+Response
+
+include::{snippets}/sequence-delete/response-fields.adoc[]
+include::{snippets}/sequence-delete/http-response.adoc[]
 
 
 == 공고 API

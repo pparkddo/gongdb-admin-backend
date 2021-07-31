@@ -9,6 +9,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,6 +41,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +68,116 @@ public class AnnouncementSequenceControllerTest {
                 .withRequestDefaults(prettyPrint())
                 .withResponseDefaults(prettyPrint())) 
             .build();
+    }
+
+    @Test
+    public void getTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
+        AnnouncementSequenceInputDto dto = AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .link("link")
+            .files(List.of(file)).build();
+        AnnouncementSequence sequence = announcementSequenceService.create(dto);
+
+        this.mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.get(
+                    END_POINT + "/{id}", sequence.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-get",
+                pathParameters(parameterWithName("id").description("차수 ID")),
+                responseFields(
+                    fieldWithPath("id").description("공고 ID"),
+                    fieldWithPath("company.id").description("회사 ID"),
+                    fieldWithPath("company.name").description("회사 이름"),
+                    fieldWithPath("sequence").description("차수 이름"),
+                    fieldWithPath("receiptStartTimestamp").description("접수 시작일"),
+                    fieldWithPath("receiptEndTimestamp").description("접수 종료일"),
+                    fieldWithPath("link").description("공고 링크"),
+                    fieldWithPath("files[]").description("공고 관련 파일"),
+                    fieldWithPath("files[].id").description("공고 관련 파일 ID"),
+                    fieldWithPath("files[].fileName").description("공고 관련 파일 이름"),
+                    fieldWithPath("createdTimestamp").description("생성된 시각")
+                )
+            ));
+    }
+
+    @Test
+    public void getAllTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
+        AnnouncementSequenceInputDto dto = AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .link("link")
+            .files(List.of(file)).build();
+        announcementSequenceService.create(dto);
+
+        this.mockMvc
+            .perform(
+                MockMvcRequestBuilders.get(END_POINT)
+                .param("page", "0")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-get-page",
+                requestParameters(parameterWithName("page").description("조회할 페이지").optional()),
+                responseFields(
+                    fieldWithPath("content").description("차수 리스트"),
+                    fieldWithPath("content[].id").description("차수 ID"),
+                    fieldWithPath("content[].company.id").description("회사 ID"),
+                    fieldWithPath("content[].company.name").description("회사 이름"),
+                    fieldWithPath("content[].sequence").description("차수 이름"),
+                    fieldWithPath("content[].receiptStartTimestamp").description("접수 시작일"),
+                    fieldWithPath("content[].receiptEndTimestamp").description("접수 종료일"),
+                    fieldWithPath("content[].link").description("공고 링크"),
+                    fieldWithPath("content[].files[]").description("공고 관련 파일"),
+                    fieldWithPath("content[].files[].id").description("공고 관련 파일 ID"),
+                    fieldWithPath("content[].files[].fileName").description("공고 관련 파일 이름"),
+                    fieldWithPath("content[].createdTimestamp").description("생성된 시각"),
+                    fieldWithPath("pageable").description("페이지 관련 정보"),
+                    fieldWithPath("pageable.sort").description("페이지 정렬 정보"),
+                    fieldWithPath("pageable.sort.sorted").description("페이지 정렬 여부"),
+                    fieldWithPath("pageable.sort.unsorted").description("페이지 미정렬 여부"),
+                    fieldWithPath("pageable.sort.empty").description("페이지가 비었는지 여부"),
+                    fieldWithPath("pageable.offset").description("페이지 오프셋"),
+                    fieldWithPath("pageable.pageSize").description("한 페이지 당 크기"),
+                    fieldWithPath("pageable.pageNumber").description("현재 페이지"),
+                    fieldWithPath("pageable.unpaged").description("페이징 미사용 여부"),
+                    fieldWithPath("pageable.paged").description("페이징 사용 여부"),
+                    fieldWithPath("last").description("마지막 페이지 여부"),
+                    fieldWithPath("totalElements").description("모든 데이터의 개수"),
+                    fieldWithPath("totalPages").description("총 페이지 수"),
+                    fieldWithPath("size").description("한 페이지 당 크기"),
+                    fieldWithPath("number").description("현재 페이지"),
+                    fieldWithPath("sort.sorted").description("페이지 정렬 여부"),
+                    fieldWithPath("sort.unsorted").description("페이지 미정렬 여부"),
+                    fieldWithPath("sort.empty").description("페이지가 비었는지 여부"),
+                    fieldWithPath("first").description("첫 페이지 여부"),
+                    fieldWithPath("numberOfElements").description("모든 데이터의 개수"),
+                    fieldWithPath("empty").description("페이지가 비었는지 여부")
+                )
+            ));
     }
 
     @Test
@@ -191,6 +303,41 @@ public class AnnouncementSequenceControllerTest {
                     fieldWithPath("receiptEndTimestamp").description("접수 종료일"),
                     fieldWithPath("link").description("공고 링크").optional()
                 ),
+                responseFields(
+                    fieldWithPath("timestamp").description("응답 시각"),
+                    fieldWithPath("message").description("응답 메시지")
+                )
+            ));
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
+        AnnouncementSequenceInputDto dto = AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .link("link")
+            .files(List.of(file)).build();
+        AnnouncementSequence sequence = announcementSequenceService.create(dto);
+
+        this.mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.delete(
+                    END_POINT + "/{id}", sequence.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-delete",
+                pathParameters(parameterWithName("id").description("차수 ID")),
                 responseFields(
                     fieldWithPath("timestamp").description("응답 시각"),
                     fieldWithPath("message").description("응답 메시지")
