@@ -37,8 +37,8 @@ public class TestFileService implements FileService {
     }
 
     @Override
-    public void delete(UploadFile uploadFile) {
-        uploadFileRepository.delete(uploadFile);
+    public void delete(Long id) {
+        uploadFileRepository.deleteById(id);
     }
 
     @Override

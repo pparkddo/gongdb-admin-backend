@@ -3,6 +3,8 @@ package com.gongdb.admin.announcement;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -68,6 +70,31 @@ public class FileControllerTest {
             .andDo(document(
                 "file-download",
                 pathParameters(parameterWithName("id").description("파일 ID"))
+            ));
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+        UploadFile uploadFile = fileService.upload(file);
+
+        this.mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.delete(END_POINT + "/{id}", uploadFile.getId())
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "file-delete",
+                pathParameters(parameterWithName("id").description("파일 ID")),
+                responseFields(
+                    fieldWithPath("timestamp").description("응답 시각"),
+                    fieldWithPath("message").description("응답 메시지")
+                )
             ));
     }
 }

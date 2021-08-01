@@ -51,7 +51,8 @@ public class LocalFileService implements FileService {
     }
 
     @Override
-    public void delete(UploadFile uploadFile) {
+    public void delete(Long id) {
+        UploadFile uploadFile = uploadFileRepository.findById(id).orElseThrow();
         uploadFileRepository.delete(uploadFile);
         try {
             Files.delete(Paths.get(uploadFile.getFilePath(), uploadFile.getFileName()));

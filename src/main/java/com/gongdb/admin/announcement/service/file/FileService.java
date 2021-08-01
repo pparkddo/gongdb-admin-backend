@@ -9,7 +9,7 @@ public interface FileService {
 
     public UploadFile upload(MultipartFile file);
 
-    public void delete(UploadFile uploadFile);
+    public void delete(Long id);
 
     public FileDto download(Long id);
 

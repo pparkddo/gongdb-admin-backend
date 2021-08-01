@@ -56,9 +56,6 @@ public class AnnouncementSequenceService {
         sequence.updateSequence(dto.getSequence());
         sequence.updateReceiptStartTimestamp(dto.getReceiptStartTimestamp());
         sequence.updateReceiptEndTimestamp(dto.getReceiptEndTimestamp());
-        for (Attachment attachment : sequence.getAttachments()) {
-            fileService.delete(attachment.getUploadFile());
-        }
         sequence.updateAttachments(getUploadFiles(dto.getFiles()));
     }
 
@@ -66,7 +63,7 @@ public class AnnouncementSequenceService {
         AnnouncementSequence sequence = announcementSequenceRepository.findById(id).orElseThrow();
         announcementSequenceRepository.delete(sequence);
         for (Attachment attachment : sequence.getAttachments()) {
-            fileService.delete(attachment.getUploadFile());
+            fileService.delete(attachment.getUploadFile().getId());
         }
     }
 

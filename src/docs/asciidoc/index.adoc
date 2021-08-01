@@ -295,6 +295,18 @@ Response
 
 include::{snippets}/file-download/http-response.adoc[]
 
+=== 파일 삭제
+
+Request
+
+include::{snippets}/file-delete/path-parameters.adoc[]
+include::{snippets}/file-delete/http-request.adoc[]
+
+Response
+
+include::{snippets}/file-delete/response-fields.adoc[]
+include::{snippets}/file-delete/http-response.adoc[]
+
 
 == 에러 API
 
