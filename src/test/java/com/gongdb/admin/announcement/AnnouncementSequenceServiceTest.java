@@ -71,6 +71,28 @@ public class AnnouncementSequenceServiceTest {
         announcementSequenceService.update(sequence.getId(), modified);
 
         assertEquals("modifiedCompanyName", sequence.getCompany().getName());
+        assertEquals(1, sequence.getAttachments().size());
+    }
+
+    @Test
+    public void deleteAttachmentTest() {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+        AnnouncementSequenceInputDto dto = AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 30, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 30, 0, 0))
+            .link("link")
+            .files(List.of(file)).build();
+        AnnouncementSequence sequence = announcementSequenceService.create(dto);
+
+        announcementSequenceService.deleteAttachment(
+            sequence.getId(), sequence.getAttachments().get(0).getUploadFile().getId());
+
         assertEquals(0, sequence.getAttachments().size());
     }
 }

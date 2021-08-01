@@ -71,12 +71,7 @@ public class AnnouncementSequence extends BaseCreateAuditEntity {
         this.link = link;
     }
 
-    public void updateAttachments(List<UploadFile> uploadFiles) {
-        attachments.clear();
-        addAttachments(uploadFiles);
-    }
-
-    private void addAttachments(List<UploadFile> uploadFiles) {
+    public void addAttachments(List<UploadFile> uploadFiles) {
         for (UploadFile each : uploadFiles) {
             Attachment attachment = Attachment.builder()
                 .announcementSequence(this)

@@ -73,6 +73,19 @@ include::{snippets}/sequence-delete/response-fields.adoc[]
 include::{snippets}/sequence-delete/http-response.adoc[]
 
 
+=== 첨부파일 삭제
+
+Request
+
+include::{snippets}/sequence-attachment-delete/path-parameters.adoc[]
+include::{snippets}/sequence-attachment-delete/http-request.adoc[]
+
+Response
+
+include::{snippets}/sequence-attachment-delete/response-fields.adoc[]
+include::{snippets}/sequence-attachment-delete/http-response.adoc[]
+
+
 == 공고 API
 
 === 조회

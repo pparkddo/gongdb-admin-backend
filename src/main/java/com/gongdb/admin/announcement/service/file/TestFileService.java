@@ -1,5 +1,7 @@
 package com.gongdb.admin.announcement.service.file;
 
+import java.util.UUID;
+
 import com.gongdb.admin.announcement.dto.response.FileDto;
 import com.gongdb.admin.announcement.entity.UploadFile;
 import com.gongdb.admin.announcement.repository.UploadFileRepository;
@@ -30,7 +32,7 @@ public class TestFileService implements FileService {
     public UploadFile upload(MultipartFile file) {
         UploadFile uploadFile = UploadFile.builder()
             .filePath(filePath)
-            .fileName(file.getOriginalFilename())
+            .fileName(UUID.randomUUID().toString())
             .originalFileName(file.getOriginalFilename())
             .contentType(file.getContentType()).build();
         return uploadFileRepository.save(uploadFile);

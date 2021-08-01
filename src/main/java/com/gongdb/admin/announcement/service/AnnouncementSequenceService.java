@@ -56,7 +56,7 @@ public class AnnouncementSequenceService {
         sequence.updateSequence(dto.getSequence());
         sequence.updateReceiptStartTimestamp(dto.getReceiptStartTimestamp());
         sequence.updateReceiptEndTimestamp(dto.getReceiptEndTimestamp());
-        sequence.updateAttachments(getUploadFiles(dto.getFiles()));
+        sequence.addAttachments(getUploadFiles(dto.getFiles()));
     }
 
     public void delete(Long id) {
@@ -65,6 +65,16 @@ public class AnnouncementSequenceService {
         for (Attachment attachment : sequence.getAttachments()) {
             fileService.delete(attachment.getUploadFile().getId());
         }
+    }
+    
+    public void deleteAttachment(Long sequenceId, Long fileId) {
+        AnnouncementSequence sequence = announcementSequenceRepository.findById(sequenceId).orElseThrow();
+        Attachment attachment = sequence.getAttachments().stream()
+            .filter(each -> each.getUploadFile().getId() == fileId)
+            .findFirst()  // id 이기 때문에 하나 이상 발견될 수 없음
+            .orElseThrow();
+        sequence.getAttachments().remove(attachment);
+        fileService.delete(attachment.getUploadFile().getId());
     }
 
     private List<UploadFile> getUploadFiles(List<MultipartFile> files) {

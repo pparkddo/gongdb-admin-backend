@@ -72,4 +72,10 @@ public class AnnouncementSequenceController {
         announcementSequenceService.delete(id);
         return SimpleMessageResponse.of("정상적으로 삭제되었습니다");
     }
+
+    @DeleteMapping("{sequenceId}/attachment/{fileId}")
+    public SimpleMessageResponse deleteAttachment(@PathVariable Long sequenceId, @PathVariable Long fileId) {
+        announcementSequenceService.deleteAttachment(sequenceId, fileId);
+        return SimpleMessageResponse.of("정상적으로 삭제되었습니다");
+    }
 }

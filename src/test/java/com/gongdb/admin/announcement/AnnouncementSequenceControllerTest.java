@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gongdb.admin.announcement.dto.request.AnnouncementSequenceInputDto;
 import com.gongdb.admin.announcement.entity.AnnouncementSequence;
+import com.gongdb.admin.announcement.entity.UploadFile;
 import com.gongdb.admin.announcement.service.AnnouncementSequenceService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -338,6 +339,48 @@ public class AnnouncementSequenceControllerTest {
             .andDo(document(
                 "sequence-delete",
                 pathParameters(parameterWithName("id").description("차수 ID")),
+                responseFields(
+                    fieldWithPath("timestamp").description("응답 시각"),
+                    fieldWithPath("message").description("응답 메시지")
+                )
+            ));
+    }
+
+    @Test
+    public void deleteAttachmentTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+            "files",
+            "test.txt",
+            MediaType.TEXT_PLAIN_VALUE,
+            "File content~".getBytes());
+
+        AnnouncementSequenceInputDto dto = AnnouncementSequenceInputDto.builder()
+            .companyName("companyName")
+            .sequence("sequence")
+            .receiptStartTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .receiptEndTimestamp(LocalDateTime.of(2021, 7, 31, 0, 0))
+            .link("link")
+            .files(List.of(file)).build();
+        AnnouncementSequence sequence = announcementSequenceService.create(dto);
+
+        UploadFile uploadFile = sequence.getAttachments().get(0).getUploadFile();
+
+        this.mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.delete(
+                    END_POINT + "/{sequenceId}/attachment/{fileId}",
+                    sequence.getId(),
+                    uploadFile.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document(
+                "sequence-attachment-delete",
+                pathParameters(
+                    parameterWithName("sequenceId").description("차수 ID"),
+                    parameterWithName("fileId").description("파일 ID")
+                ),
                 responseFields(
                     fieldWithPath("timestamp").description("응답 시각"),
                     fieldWithPath("message").description("응답 메시지")
