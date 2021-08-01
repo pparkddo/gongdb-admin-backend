@@ -27,7 +27,7 @@ public class Attachment extends BaseCreateAuditEntity {
     private AnnouncementSequence announcementSequence;
 
     @ManyToOne
-    @JoinColumn(name = "attachment_id", nullable = false)
+    @JoinColumn(name = "attachment_id")
     private UploadFile uploadFile;
 
     @Builder

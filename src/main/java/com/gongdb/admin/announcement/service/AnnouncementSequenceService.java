@@ -73,8 +73,10 @@ public class AnnouncementSequenceService {
             .filter(each -> each.getUploadFile().getId() == fileId)
             .findFirst()  // id 이기 때문에 하나 이상 발견될 수 없음
             .orElseThrow();
+        UploadFile uploadFile = attachment.getUploadFile();
+
         sequence.getAttachments().remove(attachment);
-        fileService.delete(attachment.getUploadFile().getId());
+        fileService.delete(uploadFile.getId());
     }
 
     private List<UploadFile> getUploadFiles(List<MultipartFile> files) {
